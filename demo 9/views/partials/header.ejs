@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Nómina Ecuador</title>
+  <!-- Google Fonts already imported in CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <nav class="navbar animate-fade-in-up">
+    <div class="nav-brand">
+      <a href="/"><i class="fa-solid fa-money-check-dollar"></i> Nómina EC</a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+      <li><a href="/empleados" class="<%= currentPath.startsWith('/empleados') ? 'active' : '' %>"><i class="fa-solid fa-users"></i> Empleados</a></li>
+      <li><a href="/asistencia" class="<%= currentPath.startsWith('/asistencia') ? 'active' : '' %>"><i class="fa-solid fa-clock"></i> Asistencia</a></li>
+      <li><a href="/permisos" class="<%= currentPath.startsWith('/permisos') ? 'active' : '' %>"><i class="fa-solid fa-calendar-check"></i> Permisos</a></li>
+      <li class="dropdown">
+        <a href="/nomina" class="<%= currentPath.startsWith('/nomina') ? 'active' : '' %>"><i class="fa-solid fa-file-invoice-dollar"></i> Nómina</a>
+        <ul class="dropdown-menu">
+          <li><a href="/nomina"><i class="fa-solid fa-list"></i> Roles de Pago</a></li>
+          <li><a href="/nomina/decimo-tercero"><i class="fa-solid fa-gift"></i> Décimo Tercero</a></li>
+          <li><a href="/nomina/decimo-cuarto"><i class="fa-solid fa-graduation-cap"></i> Décimo Cuarto</a></li>
+          <li><a href="/nomina/vacaciones"><i class="fa-solid fa-umbrella-beach"></i> Vacaciones</a></li>
+          <li><a href="/nomina/utilidades"><i class="fa-solid fa-hand-holding-dollar"></i> Utilidades</a></li>
+        </ul>
+      </li>
+      <li><a href="/reportes" class="<%= currentPath.startsWith('/reportes') ? 'active' : '' %>"><i class="fa-solid fa-chart-pie"></i> Reportes</a></li>
+      <li><a href="/configuracion" class="<%= currentPath.startsWith('/configuracion') ? 'active' : '' %>"><i class="fa-solid fa-gear"></i> Config</a></li>
+      <li><a href="#" id="themeToggleBtn" title="Cambiar Tema"><i class="fa-solid fa-droplet"></i> Tema</a></li>
+    </ul>
+  </nav>
+  <main class="container">

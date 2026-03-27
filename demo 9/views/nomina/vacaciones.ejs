@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+
+<h1>Control de Vacaciones</h1>
+<p class="subtitle">15 días base + 1 día adicional desde el 5to año de servicio (máx. 15 adicionales)</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Empleado</th>
+      <th>Años Servicio</th>
+      <th>Días Derecho</th>
+      <th>Días Tomados</th>
+      <th>Días Disponibles</th>
+      <th>Valor Diario</th>
+      <th>Valor Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% detalles.forEach(d => { %>
+      <tr>
+        <td><%= d.empleado %></td>
+        <td><%= d.anios_servicio %></td>
+        <td><%= d.dias_derecho %></td>
+        <td><%= d.dias_tomados %></td>
+        <td><strong><%= d.dias_disponibles %></strong></td>
+        <td><%= formatMoney(d.valor_diario) %></td>
+        <td><%= formatMoney(d.valor_total) %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

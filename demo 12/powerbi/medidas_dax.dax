@@ -1,0 +1,276 @@
+// ============================================================
+//  MEDIDAS DAX — Aging Report (Cartera Vencida)
+//  Tabla principal: aging_report
+//  Columnas: id_factura, id_cliente, nombre_comercial, segmento,
+//            fecha_emision, fecha_vencimiento, termino_dias,
+//            monto_total, saldo_pendiente, estado,
+//            dias_vencido, aging_bucket, alerta_por_vencer
+// ============================================================
+
+
+// ─────────────────────────────────────────────
+//  1. CONTEOS DE FACTURAS
+// ─────────────────────────────────────────────
+
+Total Facturas =
+    COUNTROWS( aging_report )
+
+Facturas Vencidas =
+    CALCULATE(
+        COUNTROWS( aging_report ),
+        aging_report[aging_bucket] IN { "1-30 días", "31-60 días", "61-90 días", "+90 días" }
+    )
+
+Facturas Vigentes =
+    CALCULATE(
+        COUNTROWS( aging_report ),
+        aging_report[aging_bucket] = "Vigente"
+    )
+
+Facturas Pagadas =
+    CALCULATE(
+        COUNTROWS( aging_report ),
+        aging_report[aging_bucket] = "Pagada"
+    )
+
+
+// ─────────────────────────────────────────────
+//  2. SALDOS
+// ─────────────────────────────────────────────
+
+Saldo Total =
+    SUM( aging_report[saldo_pendiente] )
+
+Saldo Vencido =
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ),
+        aging_report[aging_bucket] IN { "1-30 días", "31-60 días", "61-90 días", "+90 días" }
+    )
+
+Saldo Vigente =
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ),
+        aging_report[aging_bucket] = "Vigente"
+    )
+
+
+// ─────────────────────────────────────────────
+//  3. % MOROSIDAD
+// ─────────────────────────────────────────────
+
+% Morosidad =
+    VAR _saldoTotal = [Saldo Total]
+    RETURN
+        IF(
+            _saldoTotal = 0,
+            BLANK(),
+            DIVIDE( [Saldo Vencido], _saldoTotal )
+        )
+
+
+// ─────────────────────────────────────────────
+//  4. SALDO POR BUCKET DE AGING
+// ─────────────────────────────────────────────
+
+Saldo 1-30 días =
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ),
+        aging_report[aging_bucket] = "1-30 días"
+    )
+
+Saldo 31-60 días =
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ),
+        aging_report[aging_bucket] = "31-60 días"
+    )
+
+Saldo 61-90 días =
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ),
+        aging_report[aging_bucket] = "61-90 días"
+    )
+
+Saldo +90 días =
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ),
+        aging_report[aging_bucket] = "+90 días"
+    )
+
+
+// ─────────────────────────────────────────────
+//  5. TOP N DEUDORES
+//     Usar como tabla visual o en combinacion con un slicer para N
+// ─────────────────────────────────────────────
+
+Top N Deudores Saldo =
+    VAR N = 10
+    VAR _tablaDeudores =
+        ADDCOLUMNS(
+            VALUES( aging_report[nombre_comercial] ),
+            "@SaldoVencido",
+            CALCULATE(
+                SUM( aging_report[saldo_pendiente] ),
+                aging_report[aging_bucket] IN { "1-30 días", "31-60 días", "61-90 días", "+90 días" }
+            )
+        )
+    VAR _topN =
+        TOPN( N, _tablaDeudores, [@SaldoVencido], DESC )
+    RETURN
+        SUMX( _topN, [@SaldoVencido] )
+
+
+// ─────────────────────────────────────────────
+//  6. PROVISION ESTIMADA
+//     1-30: 1%  |  31-60: 5%  |  61-90: 20%  |  +90: 50%
+// ─────────────────────────────────────────────
+
+Provisión Estimada =
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ) * 0.01,
+        aging_report[aging_bucket] = "1-30 días"
+    )
+    +
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ) * 0.05,
+        aging_report[aging_bucket] = "31-60 días"
+    )
+    +
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ) * 0.20,
+        aging_report[aging_bucket] = "61-90 días"
+    )
+    +
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ) * 0.50,
+        aging_report[aging_bucket] = "+90 días"
+    )
+
+
+// ─────────────────────────────────────────────
+//  7. DIAS PROMEDIO DE MORA
+//     Solo facturas vencidas (dias_vencido > 0)
+// ─────────────────────────────────────────────
+
+Días Promedio de Mora =
+    CALCULATE(
+        AVERAGE( aging_report[dias_vencido] ),
+        aging_report[aging_bucket] IN { "1-30 días", "31-60 días", "61-90 días", "+90 días" },
+        aging_report[dias_vencido] > 0
+    )
+
+
+// ─────────────────────────────────────────────
+//  8. INDICE DE RECUPERACION
+//     Facturas pagadas (saldo = 0) / total emitidas
+// ─────────────────────────────────────────────
+
+Índice de Recuperación =
+    DIVIDE(
+        [Facturas Pagadas],
+        [Total Facturas]
+    )
+
+
+// ─────────────────────────────────────────────
+//  9. SALDO POR SEGMENTO
+//     Usar en visual de matriz/barra con segmento en eje
+// ─────────────────────────────────────────────
+
+Saldo por Segmento =
+    SUM( aging_report[saldo_pendiente] )
+    // Colocar aging_report[segmento] en el eje/filas del visual
+
+
+// ─────────────────────────────────────────────
+// 10. ANTIGÜEDAD PROMEDIO DE CARTERA
+//     Dias desde emision hasta hoy, solo facturas con saldo > 0
+// ─────────────────────────────────────────────
+
+Antigüedad Promedio de Cartera =
+    AVERAGEX(
+        FILTER( aging_report, aging_report[saldo_pendiente] > 0 ),
+        DATEDIFF( aging_report[fecha_emision], TODAY(), DAY )
+    )
+
+
+// ─────────────────────────────────────────────
+// 11. FACTURAS POR VENCER EN 7 DIAS
+// ─────────────────────────────────────────────
+
+Facturas por Vencer 7d =
+    CALCULATE(
+        COUNTROWS( aging_report ),
+        aging_report[alerta_por_vencer] = TRUE()
+    )
+
+Saldo por Vencer 7d =
+    CALCULATE(
+        SUM( aging_report[saldo_pendiente] ),
+        aging_report[alerta_por_vencer] = TRUE()
+    )
+
+
+// ─────────────────────────────────────────────
+// 12. KPI SEMAFORO CARTERA
+//     Verde: morosidad < 10%
+//     Amarillo: 10% - 25%
+//     Rojo: > 25%
+// ─────────────────────────────────────────────
+
+KPI Semáforo Cartera =
+    VAR _pctMora = [% Morosidad]
+    RETURN
+        SWITCH(
+            TRUE(),
+            _pctMora <= 0.10, "Verde",
+            _pctMora <= 0.25, "Amarillo",
+            "Rojo"
+        )
+
+KPI Semáforo Cartera Valor =
+    // Devuelve 1, 2 o 3 para formato condicional en Power BI
+    VAR _pctMora = [% Morosidad]
+    RETURN
+        SWITCH(
+            TRUE(),
+            _pctMora <= 0.10, 1,
+            _pctMora <= 0.25, 2,
+            3
+        )
+
+
+// ─────────────────────────────────────────────
+// 13. TREND: EMISION POR MES
+//     Usar con fecha_emision en eje X
+// ─────────────────────────────────────────────
+
+Emisión por Mes - Monto =
+    SUM( aging_report[monto_total] )
+
+Emisión por Mes - Cantidad =
+    COUNTROWS( aging_report )
+
+
+// ─────────────────────────────────────────────
+// 14. COLUMNAS CALCULADAS
+//     Agregar en Power Query o como columnas calculadas en DAX
+// ─────────────────────────────────────────────
+
+// -- Columna: Rango Monto --
+Rango Monto =
+    SWITCH(
+        TRUE(),
+        aging_report[monto_total] < 1000,    "< $1,000",
+        aging_report[monto_total] < 5000,    "$1,000 - $4,999",
+        aging_report[monto_total] < 20000,   "$5,000 - $19,999",
+        aging_report[monto_total] < 50000,   "$20,000 - $49,999",
+        ">= $50,000"
+    )
+
+// -- Columna: Mes Emisión --
+Mes Emisión =
+    FORMAT( aging_report[fecha_emision], "YYYY-MM" )
+
+// -- Columna: Trimestre --
+Trimestre =
+    "T" & FORMAT( aging_report[fecha_emision], "Q" ) & " " & YEAR( aging_report[fecha_emision] )

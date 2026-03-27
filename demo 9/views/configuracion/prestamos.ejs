@@ -1,0 +1,75 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+  <h1>Gestión de Préstamos</h1>
+  <a href="/configuracion" class="btn btn-secondary">Volver a Configuración</a>
+</div>
+
+<div class="panel">
+  <h3>Registrar Préstamo</h3>
+  <form method="POST" action="/configuracion/prestamos" class="form">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Empleado</label>
+        <select name="empleado_id" required class="input">
+          <option value="">-- Seleccionar --</option>
+          <% empleados.forEach(e => { %>
+            <option value="<%= e.id %>"><%= e.apellidos %> <%= e.nombres %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select name="tipo" required class="input">
+          <option value="Quirografario">Quirografario IESS</option>
+          <option value="Hipotecario">Hipotecario IESS</option>
+          <option value="Anticipo">Anticipo de Sueldo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Monto Total</label>
+        <input type="number" name="monto_total" required step="0.01" min="0" class="input">
+      </div>
+      <div class="form-group">
+        <label>Cuota Mensual</label>
+        <input type="number" name="cuota_mensual" required step="0.01" min="0" class="input">
+      </div>
+      <div class="form-group">
+        <label>Fecha Inicio</label>
+        <input type="date" name="fecha_inicio" required class="input">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Registrar</button>
+  </form>
+</div>
+
+<h2>Préstamos Activos</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Empleado</th>
+      <th>Tipo</th>
+      <th>Monto Total</th>
+      <th>Cuota Mensual</th>
+      <th>Saldo</th>
+      <th>Fecha Inicio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (prestamos.length === 0) { %>
+      <tr><td colspan="6" class="text-center">Sin préstamos activos.</td></tr>
+    <% } %>
+    <% prestamos.forEach(p => { %>
+      <tr>
+        <td><%= p.apellidos %> <%= p.nombres %></td>
+        <td><%= p.tipo %></td>
+        <td><%= formatMoney(p.monto_total) %></td>
+        <td><%= formatMoney(p.cuota_mensual) %></td>
+        <td><%= formatMoney(p.saldo) %></td>
+        <td><%= p.fecha_inicio %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

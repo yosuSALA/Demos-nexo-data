@@ -1,0 +1,304 @@
+// ============================================================================
+// MEDIDAS DAX — Monitoreo Competitivo de Precios
+// Demo #13: Comparador de Precios vs Competencia
+// ============================================================================
+// Tablas esperadas en el modelo:
+//   - comparacion_precios  (CSV: comparacion_precios.csv)
+//       Columnas: nombre, precio_empresa, precio_competidor, disponibilidad,
+//                 diff_absoluta, diff_porcentual
+//   - alertas_precios      (CSV: alertas_precios.csv)
+//       Mismas columnas, filtrado a diff_porcentual > 3%
+//
+// Parametros del negocio (constantes del modelo Python):
+//   UMBRAL_ALERTA_PCT = 3.0
+//   VOLUMEN_MENSUAL   = 50 unidades/mes por SKU
+// ============================================================================
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COLUMNAS CALCULADAS (agregar en la tabla comparacion_precios)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Clasificacion: Ventaja / Desventaja / Neutral
+// Logica: diff_porcentual > 0 significa que somos MAS CAROS (desventaja)
+//         diff_porcentual < 0 significa que somos MAS BARATOS (ventaja)
+//         Entre -1% y +1% se considera neutral
+Clasificacion =
+    SWITCH(
+        TRUE(),
+        comparacion_precios[diff_porcentual] > 1,   "Desventaja",
+        comparacion_precios[diff_porcentual] < -1,   "Ventaja",
+        "Neutral"
+    )
+
+
+// Rango de Diferencia porcentual
+Rango Diferencia =
+    SWITCH(
+        TRUE(),
+        comparacion_precios[diff_porcentual] >= 10,              "10%+ (Critico)",
+        comparacion_precios[diff_porcentual] >= 5,               "5% a 9.9%",
+        comparacion_precios[diff_porcentual] >= 3,               "3% a 4.9% (Alerta)",
+        comparacion_precios[diff_porcentual] >= 0,               "0% a 2.9% (Aceptable)",
+        comparacion_precios[diff_porcentual] >= -5,              "-5% a -0.1% (Ventaja)",
+        "Mas de -5% (Gran Ventaja)"
+    )
+
+
+// Urgencia de accion
+Urgencia =
+    SWITCH(
+        TRUE(),
+        comparacion_precios[diff_porcentual] >= 10,   "Alta",
+        comparacion_precios[diff_porcentual] >= 3,    "Media",
+        comparacion_precios[diff_porcentual] >= 0,    "Baja",
+        "Sin accion"
+    )
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MEDIDAS — KPIs PRINCIPALES
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 1. Total de productos monitoreados
+Total Productos Monitoreados =
+    COUNTROWS( comparacion_precios )
+
+
+// 2. Productos donde somos MAS CAROS que la competencia (diff_porcentual > 0)
+Productos Mas Caros que Competencia =
+    CALCULATE(
+        COUNTROWS( comparacion_precios ),
+        comparacion_precios[diff_porcentual] > 0
+    )
+
+
+// 3. Productos donde somos MAS BARATOS que la competencia (diff_porcentual < 0)
+Productos Mas Baratos que Competencia =
+    CALCULATE(
+        COUNTROWS( comparacion_precios ),
+        comparacion_precios[diff_porcentual] < 0
+    )
+
+
+// 4. Diferencia promedio en dolares (valor absoluto de diff_absoluta)
+Diferencia Promedio USD =
+    AVERAGE( comparacion_precios[diff_absoluta] )
+
+
+// 5. Diferencia promedio porcentual
+Diferencia Promedio Porcentual =
+    AVERAGE( comparacion_precios[diff_porcentual] )
+
+
+// 6. Impacto Economico Mensual estimado
+//    Suma de (diff_absoluta * VOLUMEN_MENSUAL) para productos donde somos mas caros.
+//    Representa la perdida potencial si los clientes migran al competidor.
+Impacto Economico Mensual =
+    VAR VolumenMensual = 50
+    RETURN
+        CALCULATE(
+            SUMX(
+                comparacion_precios,
+                comparacion_precios[diff_absoluta] * VolumenMensual
+            ),
+            comparacion_precios[diff_porcentual] > 0
+        )
+
+
+// 7. Productos en Alerta Critica (diferencia >= umbral de 3%)
+Productos en Alerta Critica =
+    CALCULATE(
+        COUNTROWS( comparacion_precios ),
+        comparacion_precios[diff_porcentual] > 3
+    )
+
+
+// 8. Porcentaje de Competitividad
+//    Proporcion de productos donde nuestro precio es igual o menor al competidor.
+Porcentaje Competitividad =
+    VAR ProductosBaratos =
+        CALCULATE(
+            COUNTROWS( comparacion_precios ),
+            comparacion_precios[diff_porcentual] <= 0
+        )
+    VAR TotalProductos =
+        COUNTROWS( comparacion_precios )
+    RETURN
+        DIVIDE( ProductosBaratos, TotalProductos, 0 )
+
+
+// 9. Ahorro Potencial si Iguala Precios
+//    Cuanto dejaria de perder la empresa si iguala todos sus precios al competidor
+//    en los productos donde somos mas caros. Multiplicado por volumen mensual.
+Ahorro Potencial si Iguala Precios =
+    VAR VolumenMensual = 50
+    RETURN
+        CALCULATE(
+            SUMX(
+                comparacion_precios,
+                comparacion_precios[diff_absoluta] * VolumenMensual
+            ),
+            comparacion_precios[diff_absoluta] > 0
+        )
+
+
+// 10. Precio Promedio Propio
+Precio Promedio Propio =
+    AVERAGE( comparacion_precios[precio_empresa] )
+
+
+// 11. Precio Promedio Competidor
+Precio Promedio Competidor =
+    AVERAGE( comparacion_precios[precio_competidor] )
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MEDIDAS — ANALISIS DE EXTREMOS
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 12. Mayor Diferencia Positiva (producto donde somos mas caros vs competidor)
+Mayor Diferencia Positiva =
+    MAX( comparacion_precios[diff_porcentual] )
+
+
+// 13. Mayor Diferencia Negativa (producto donde somos mas baratos vs competidor)
+Mayor Diferencia Negativa =
+    MIN( comparacion_precios[diff_porcentual] )
+
+
+// 14. Nombre del producto con mayor diferencia positiva
+Producto Mayor Sobrecoste =
+    VAR MaxDiff = [Mayor Diferencia Positiva]
+    RETURN
+        CALCULATE(
+            FIRSTNONBLANK( comparacion_precios[nombre], 1 ),
+            comparacion_precios[diff_porcentual] = MaxDiff
+        )
+
+
+// 15. Nombre del producto con mayor ventaja competitiva
+Producto Mayor Ventaja =
+    VAR MinDiff = [Mayor Diferencia Negativa]
+    RETURN
+        CALCULATE(
+            FIRSTNONBLANK( comparacion_precios[nombre], 1 ),
+            comparacion_precios[diff_porcentual] = MinDiff
+        )
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MEDIDAS — DISTRIBUCION POR RANGOS
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 16. Productos en rango critico (>= 10%)
+Productos Rango Critico =
+    CALCULATE(
+        COUNTROWS( comparacion_precios ),
+        comparacion_precios[diff_porcentual] >= 10
+    )
+
+
+// 17. Productos en rango moderado (3% a 9.9%)
+Productos Rango Moderado =
+    CALCULATE(
+        COUNTROWS( comparacion_precios ),
+        comparacion_precios[diff_porcentual] >= 3,
+        comparacion_precios[diff_porcentual] < 10
+    )
+
+
+// 18. Productos en rango aceptable (0% a 2.9%)
+Productos Rango Aceptable =
+    CALCULATE(
+        COUNTROWS( comparacion_precios ),
+        comparacion_precios[diff_porcentual] >= 0,
+        comparacion_precios[diff_porcentual] < 3
+    )
+
+
+// 19. Productos con ventaja competitiva (< 0%)
+Productos con Ventaja =
+    CALCULATE(
+        COUNTROWS( comparacion_precios ),
+        comparacion_precios[diff_porcentual] < 0
+    )
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MEDIDAS — SEMAFORO DE COMPETITIVIDAD
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 20. KPI Semaforo Competitividad
+//     Verde:    >= 70% de productos competitivos
+//     Amarillo: >= 50% y < 70%
+//     Rojo:     < 50%
+KPI Semaforo Competitividad =
+    VAR PctCompetitivo = [Porcentaje Competitividad]
+    RETURN
+        SWITCH(
+            TRUE(),
+            PctCompetitivo >= 0.70,   "Verde",
+            PctCompetitivo >= 0.50,   "Amarillo",
+            "Rojo"
+        )
+
+
+// 21. Valor numerico del semaforo (para formato condicional en Power BI)
+//     1 = Rojo, 2 = Amarillo, 3 = Verde
+KPI Semaforo Valor =
+    VAR PctCompetitivo = [Porcentaje Competitividad]
+    RETURN
+        SWITCH(
+            TRUE(),
+            PctCompetitivo >= 0.70,   3,
+            PctCompetitivo >= 0.50,   2,
+            1
+        )
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MEDIDAS — TABLA DE ALERTAS (alertas_precios)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 22. Total de alertas activas
+Total Alertas Activas =
+    COUNTROWS( alertas_precios )
+
+
+// 23. Perdida estimada mensual total (desde tabla de alertas)
+Perdida Estimada Mensual =
+    VAR VolumenMensual = 50
+    RETURN
+        SUMX(
+            alertas_precios,
+            alertas_precios[diff_absoluta] * VolumenMensual
+        )
+
+
+// 24. Perdida promedio por producto en alerta
+Perdida Promedio por Producto =
+    DIVIDE(
+        [Perdida Estimada Mensual],
+        [Total Alertas Activas],
+        0
+    )
+
+
+// 25. Nivel de alerta general (replica la logica de alertas.py)
+//     Critica:  >= 3 productos con diff >= 10%
+//     Moderada: >= 1 producto con diff >= 10%
+//     Baja:     resto
+Nivel Alerta General =
+    VAR CriticosCount =
+        CALCULATE(
+            COUNTROWS( alertas_precios ),
+            alertas_precios[diff_porcentual] >= 10
+        )
+    RETURN
+        SWITCH(
+            TRUE(),
+            CriticosCount >= 3,   "CRITICA",
+            CriticosCount >= 1,   "MODERADA",
+            "BAJA"
+        )

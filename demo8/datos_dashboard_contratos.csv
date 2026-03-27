@@ -1,0 +1,101 @@
+﻿id_obligacion,tipo,entidad_relacionada,fecha_inicio,fecha_vencimiento,valor_usd,responsable_interno,dias_para_vencer,estado_semaforo
+OBL-0001,Garantía,"Laboratorios Zambrano, de la Torre y Medrano",2024-06-16,2025-10-05,166224.43,Carlos Mendez,-172,Rojo
+OBL-0076,Permiso Municipal,Vela-Saavedra,2023-08-22,2025-10-06,352736.39,Carlos Mendez,-171,Rojo
+OBL-0042,Contrato de Arriendo,Rico y Vázquez S.C.,2024-04-17,2025-10-10,213806.41,Sofía Reyes,-167,Rojo
+OBL-0070,Contrato de Arriendo,"Rodríguez, Hidalgo y Yáñez",2025-10-31,2025-10-15,72853.95,Andrés Salinas,-162,Rojo
+OBL-0086,Garantía,"Almaraz, Hinojosa y Mejía",2025-03-06,2025-10-16,126773.44,Valentina Cruz,-161,Rojo
+OBL-0060,Contrato de Arriendo,Despacho Vélez y Ybarra,2025-05-01,2025-11-01,378781.78,Sofía Reyes,-145,Rojo
+OBL-0093,Contrato de Arriendo,Laboratorios Díaz-Delgado,2024-08-06,2025-12-03,27209.08,Andrés Salinas,-113,Rojo
+OBL-0006,Garantía,Corporacin Flores y Aparicio,2024-01-10,2025-12-06,263999.31,Jorge Quispe,-110,Rojo
+OBL-0066,Contrato de Arriendo,"Tafoya, Noriega y Jasso",2026-03-25,2025-12-08,118385.34,Daniela Fuentes,-108,Rojo
+OBL-0046,Permiso Municipal,"Grupo Solís, Flórez y Godoy",2025-01-22,2025-12-15,235802.39,Jorge Quispe,-101,Rojo
+OBL-0002,Póliza de Seguro,Galván S.A.,2024-09-13,2026-01-11,81506.28,Valentina Cruz,-74,Rojo
+OBL-0012,Contrato de Arriendo,Sosa-Lovato,2023-10-09,2026-01-24,368996.72,Jorge Quispe,-61,Rojo
+OBL-0098,Garantía,Holguín-Acosta S.A. de C.V.,2025-09-11,2026-02-10,478135.64,Daniela Fuentes,-44,Rojo
+OBL-0065,Contrato de Arriendo,Despacho Maya y Chávez,2024-05-25,2026-02-14,1420.81,Ricardo Morales,-40,Rojo
+OBL-0057,Permiso Municipal,"Proyectos Ontiveros, Rosales y Ozuna",2024-07-30,2026-02-26,163363.67,Carlos Mendez,-28,Rojo
+OBL-0047,Garantía,del Río-Tovar y Asociados,2026-03-13,2026-03-03,456517.94,Daniela Fuentes,-23,Rojo
+OBL-0034,Garantía,"Gutiérrez, Coronado y Porras",2024-08-09,2026-03-14,12217.65,Valentina Cruz,-12,Rojo
+OBL-0027,Garantía,Industrias Roldán-Espino,2025-04-10,2026-04-02,88331.36,Ricardo Morales,7,Rojo
+OBL-0048,Garantía,Grupo Ballesteros-Tejeda,2026-02-07,2026-04-02,394600.57,Ricardo Morales,7,Rojo
+OBL-0053,Póliza de Seguro,"Aguayo, Altamirano y Serrano",2024-02-25,2026-04-02,274426.56,Andrés Salinas,7,Rojo
+OBL-0056,Contrato de Arriendo,"Proyectos Grijalva, Roque y Rocha",2024-07-22,2026-04-02,369944.16,Andrés Salinas,7,Rojo
+OBL-0062,Garantía,"Industrias Ramos, Alemán y Palomo",2023-05-22,2026-04-02,150567.93,Valentina Cruz,7,Rojo
+OBL-0074,Contrato de Arriendo,Ávalos y Salgado S.C.,2024-06-28,2026-04-02,289391.31,Jorge Quispe,7,Rojo
+OBL-0009,Garantía,Macías-Gallardo A.C.,2024-09-08,2026-04-10,463625.58,Andrés Salinas,15,Amarillo
+OBL-0036,Garantía,Delgadillo y Saldivar A.C.,2023-05-31,2026-04-10,386620.76,Carlos Mendez,15,Amarillo
+OBL-0037,Póliza de Seguro,"Despacho Feliciano, Puente y Sevilla",2023-07-08,2026-04-10,137544.81,Ana Torres,15,Amarillo
+OBL-0044,Póliza de Seguro,Proyectos Crespo-Coronado,2025-05-09,2026-04-10,356736.44,Carlos Mendez,15,Amarillo
+OBL-0082,Contrato de Arriendo,Moreno S.C.,2023-11-22,2026-04-10,347830.53,Valentina Cruz,15,Amarillo
+OBL-0087,Garantía,Corporacin Raya y Maya,2023-07-14,2026-04-10,8087.3,Carlos Mendez,15,Amarillo
+OBL-0090,Contrato de Arriendo,Corporacin Avilés-Ramos,2024-05-13,2026-04-10,483705.47,Sofía Reyes,15,Amarillo
+OBL-0054,Garantía,Calvillo y Sánchez S. R.L. de C.V.,2023-10-14,2026-04-25,104910.83,Daniela Fuentes,30,Amarillo
+OBL-0094,Garantía,Grupo Meza-Terán,2023-05-30,2026-04-25,238656.85,Jorge Quispe,30,Amarillo
+OBL-0095,Permiso Municipal,Hidalgo y Valdez e Hijos,2026-01-08,2026-04-25,237820.2,Sofía Reyes,30,Amarillo
+OBL-0097,Garantía,Cavazos y Gutiérrez S. R.L. de C.V.,2025-06-09,2026-04-25,480919.6,Ana Torres,30,Amarillo
+OBL-0080,Permiso Municipal,Malave-Delgado,2026-03-12,2026-05-07,227563.35,Andrés Salinas,42,Verde
+OBL-0021,Póliza de Seguro,Industrias Tórrez-Macías,2024-08-16,2026-05-15,289121.42,Ricardo Morales,50,Verde
+OBL-0049,Contrato de Arriendo,Industrias Bahena y Hinojosa,2026-02-27,2026-05-26,238191.85,Ricardo Morales,61,Verde
+OBL-0018,Póliza de Seguro,Reynoso A.C.,2023-06-23,2026-06-01,241266.27,Andrés Salinas,67,Verde
+OBL-0041,Póliza de Seguro,Despacho Vergara y Manzanares,2025-08-12,2026-06-16,15467.35,Ana Torres,82,Verde
+OBL-0020,Garantía,"Corporacin Noriega, Santana y Marrero",2023-07-10,2026-06-22,282906.38,Ricardo Morales,88,Verde
+OBL-0078,Contrato de Arriendo,"Despacho del Valle, Quiroz y Franco",2025-04-06,2026-07-15,123370.42,Carlos Mendez,111,Verde
+OBL-0077,Póliza de Seguro,Despacho Naranjo y Tejada,2025-05-24,2026-07-16,365362.55,Valentina Cruz,112,Verde
+OBL-0004,Garantía,Club Ordóñez y Jáquez,2023-04-02,2026-07-30,162088.1,Daniela Fuentes,126,Verde
+OBL-0031,Póliza de Seguro,Leiva S.A.,2025-03-11,2026-08-04,103388.37,Ana Torres,131,Verde
+OBL-0016,Garantía,Barajas-Vergara e Hijos,2024-06-21,2026-08-20,171339.43,Ana Torres,147,Verde
+OBL-0071,Contrato de Arriendo,Corporacin Zelaya y Ortiz,2024-08-02,2026-09-12,69472.91,Daniela Fuentes,170,Verde
+OBL-0092,Póliza de Seguro,"Barrera, Roybal y Morales",2023-05-23,2026-10-14,289300.94,Ricardo Morales,202,Verde
+OBL-0050,Garantía,Quiroz-Saucedo,2024-11-22,2026-10-17,384202.82,Sofía Reyes,205,Verde
+OBL-0040,Contrato de Arriendo,Corporacin Amador y Ureña,2024-09-30,2026-10-18,156377.4,Ricardo Morales,206,Verde
+OBL-0058,Garantía,Laboratorios Arce y Quiñónez,2024-03-16,2026-10-23,477985.84,Carlos Mendez,211,Verde
+OBL-0017,Garantía,Rangel S. R.L. de C.V.,2025-01-27,2026-11-10,417078.82,Andrés Salinas,229,Verde
+OBL-0028,Contrato de Arriendo,Hernández-Roldán S.A. de C.V.,2023-05-08,2026-11-18,222443.27,Ana Torres,237,Verde
+OBL-0035,Garantía,Olivera S.A.,2024-01-06,2026-11-26,101077.2,Valentina Cruz,245,Verde
+OBL-0011,Garantía,Grupo Velásquez y Haro,2023-10-19,2026-12-20,489649.57,Ana Torres,269,Verde
+OBL-0026,Garantía,Arias-Marín S.A.,2023-11-02,2026-12-25,226501.26,Valentina Cruz,274,Verde
+OBL-0015,Contrato de Arriendo,Reyna-Jiménez,2026-01-25,2027-01-11,154578.5,Ricardo Morales,291,Verde
+OBL-0100,Permiso Municipal,Cervantes-Roque,2023-07-30,2027-01-12,231093.19,Jorge Quispe,292,Verde
+OBL-0089,Póliza de Seguro,Quezada y Solís A.C.,2025-05-22,2027-01-18,242974.34,Ana Torres,298,Verde
+OBL-0075,Permiso Municipal,Rodríquez-Villalpando S. R.L. de C.V.,2023-06-06,2027-01-26,463355.66,Ricardo Morales,306,Verde
+OBL-0039,Póliza de Seguro,Esquibel y Pacheco S. R.L. de C.V.,2025-10-27,2027-01-28,471695.63,Valentina Cruz,308,Verde
+OBL-0061,Permiso Municipal,Zaragoza-Lara,2026-02-24,2027-02-18,308170.51,Andrés Salinas,329,Verde
+OBL-0025,Contrato de Arriendo,Proyectos Valenzuela-Varela,2025-05-07,2027-03-14,136477.21,Carlos Mendez,353,Verde
+OBL-0081,Permiso Municipal,"Torres, Castañeda y Vallejo",2023-10-09,2027-03-31,177104.36,Valentina Cruz,370,Verde
+OBL-0023,Permiso Municipal,Despacho Nieves y Arenas,2023-04-19,2027-04-08,313628.91,Sofía Reyes,378,Verde
+OBL-0022,Contrato de Arriendo,"Arroyo, Botello y Villa",2024-04-29,2027-04-23,484837.03,Valentina Cruz,393,Verde
+OBL-0069,Permiso Municipal,"Grupo Téllez, Pineda y Flores",2025-05-10,2027-04-29,77979.38,Sofía Reyes,399,Verde
+OBL-0067,Permiso Municipal,Grupo Serna y Roque,2023-12-09,2027-05-22,191400.96,Jorge Quispe,422,Verde
+OBL-0024,Póliza de Seguro,"Industrias Melgar, Rivero y Ocasio",2025-08-29,2027-05-29,298000.74,Valentina Cruz,429,Verde
+OBL-0051,Contrato de Arriendo,Zayas-Roybal S.A.,2025-02-27,2027-06-15,163608.99,Carlos Mendez,446,Verde
+OBL-0091,Permiso Municipal,Castro S.C.,2026-01-13,2027-06-22,119735.77,Andrés Salinas,453,Verde
+OBL-0013,Permiso Municipal,"Grupo Chacón, Casillas y Vera",2026-01-29,2027-06-24,23700.6,Ricardo Morales,455,Verde
+OBL-0005,Contrato de Arriendo,Grupo Flores y Batista,2024-01-14,2027-07-07,147123.52,Sofía Reyes,468,Verde
+OBL-0055,Garantía,Laboratorios Naranjo-Benavides,2025-04-01,2027-07-15,272718.91,Jorge Quispe,476,Verde
+OBL-0063,Garantía,Niño-Gonzales y Asociados,2024-08-17,2027-07-15,495154.34,Ana Torres,476,Verde
+OBL-0096,Contrato de Arriendo,Club Hurtado-del Río,2024-01-20,2027-07-15,145107.32,Andrés Salinas,476,Verde
+OBL-0045,Póliza de Seguro,Proyectos Canales-Gómez,2023-05-28,2027-08-15,47365.17,Andrés Salinas,507,Verde
+OBL-0068,Póliza de Seguro,Gollum A.C.,2023-12-12,2027-08-25,94925.19,Daniela Fuentes,517,Verde
+OBL-0029,Póliza de Seguro,de la Rosa S. R.L. de C.V.,2026-03-08,2027-09-20,95915.63,Andrés Salinas,543,Verde
+OBL-0064,Permiso Municipal,Alonso y Durán e Hijos,2025-02-16,2027-09-30,423970.74,Valentina Cruz,553,Verde
+OBL-0032,Contrato de Arriendo,"Industrias Córdova, Carranza y Matos",2025-09-30,2027-10-12,3050.82,Ana Torres,565,Verde
+OBL-0030,Garantía,Romo-Bahena,2024-12-16,2027-10-14,387991.07,Sofía Reyes,567,Verde
+OBL-0052,Permiso Municipal,"Grupo Soto, Cardona y Fonseca",2024-04-18,2027-10-23,201007.42,Daniela Fuentes,576,Verde
+OBL-0019,Garantía,Escobedo-Soria,2023-12-03,2027-10-27,231772.57,Daniela Fuentes,580,Verde
+OBL-0079,Garantía,"Club Batista, Hurtado y Sepúlveda",2023-06-15,2027-10-30,306906.52,Ricardo Morales,583,Verde
+OBL-0073,Permiso Municipal,"Proyectos Olmos, Rael y Villalpando",2024-03-18,2027-11-12,192972.64,Jorge Quispe,596,Verde
+OBL-0038,Contrato de Arriendo,Barrios-Saavedra S. R.L. de C.V.,2025-06-02,2027-11-20,104082.11,Ricardo Morales,604,Verde
+OBL-0083,Garantía,Figueroa-Colón e Hijos,2023-08-21,2027-11-24,31647.46,Andrés Salinas,608,Verde
+OBL-0084,Contrato de Arriendo,Solano-Corona S.A.,2024-07-31,2027-12-03,328503.62,Valentina Cruz,617,Verde
+OBL-0088,Póliza de Seguro,"Proyectos Loya, Guardado y Marrero",2025-12-10,2027-12-22,329918.66,Ricardo Morales,636,Verde
+OBL-0043,Permiso Municipal,Rincón e Hijos,2025-05-28,2027-12-23,308541.35,Valentina Cruz,637,Verde
+OBL-0033,Contrato de Arriendo,Proyectos Berríos y Hidalgo,2024-05-08,2027-12-25,167311.59,Ana Torres,639,Verde
+OBL-0003,Póliza de Seguro,Rolón S.A. de C.V.,2024-08-18,2027-12-26,483180.34,Ricardo Morales,640,Verde
+OBL-0059,Permiso Municipal,"Laboratorios Granado, Arevalo y Pedraza",2025-10-22,2027-12-27,164376.71,Ana Torres,641,Verde
+OBL-0072,Permiso Municipal,Melgar-Arce S.A.,2025-06-21,2028-01-04,312000.99,Andrés Salinas,649,Verde
+OBL-0008,Garantía,Medrano S.C.,2024-09-28,2028-01-05,214099.75,Ricardo Morales,650,Verde
+OBL-0007,Contrato de Arriendo,Grupo Balderas-Abrego,2023-12-10,2028-01-12,55541.81,Carlos Mendez,657,Verde
+OBL-0085,Contrato de Arriendo,Hurtado S. R.L. de C.V.,2025-12-21,2028-01-25,144121.01,Carlos Mendez,670,Verde
+OBL-0010,Permiso Municipal,Club Barrientos y Granados,2025-04-02,2028-02-02,246759.72,Sofía Reyes,678,Verde
+OBL-0014,Póliza de Seguro,Industrias Tirado-Hernández,2026-02-09,2028-02-07,6637.34,Jorge Quispe,683,Verde
+OBL-0099,Garantía,"Club Valencia, Maldonado y Aponte",2024-09-28,2028-02-22,168148.74,Valentina Cruz,698,Verde

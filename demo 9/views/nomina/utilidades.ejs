@@ -1,0 +1,46 @@
+<%- include('../partials/header') %>
+
+<h1>Participación de Utilidades (15%)</h1>
+<p class="subtitle">10% equitativo por días trabajados | 5% proporcional a cargas familiares</p>
+
+<div class="panel">
+  <h3>Calcular Utilidades</h3>
+  <form method="POST" action="/nomina/utilidades" class="form-inline">
+    <label>Año Fiscal:</label>
+    <input type="number" name="anio" value="<%= anio %>" min="2020" max="2030" class="input" style="width:100px">
+    <label>Utilidad Líquida (USD):</label>
+    <input type="number" name="utilidad_liquida" required step="0.01" min="0" class="input" style="width:200px">
+    <button type="submit" class="btn btn-primary" onclick="return confirm('Calcular y guardar el reparto de utilidades?')">Calcular Reparto</button>
+  </form>
+</div>
+
+<h2>Historial de Cálculos</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Año</th>
+      <th>Utilidad Líquida</th>
+      <th>15% Total</th>
+      <th>10% (Equitativo)</th>
+      <th>5% (Cargas)</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (historial.length === 0) { %>
+      <tr><td colspan="6" class="text-center">Sin cálculos registrados.</td></tr>
+    <% } %>
+    <% historial.forEach(h => { %>
+      <tr>
+        <td><%= h.anio %></td>
+        <td><%= formatMoney(h.utilidad_liquida) %></td>
+        <td><%= formatMoney(h.total_15_porciento) %></td>
+        <td><%= formatMoney(h.total_10_porciento) %></td>
+        <td><%= formatMoney(h.total_5_porciento) %></td>
+        <td><a href="/nomina/utilidades/<%= h.id %>" class="btn btn-sm btn-info">Ver Detalle</a></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

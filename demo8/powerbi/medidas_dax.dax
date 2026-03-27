@@ -1,0 +1,287 @@
+// ============================================================
+// MEDIDAS DAX — Monitor de Vencimiento de Contratos
+// Fuente de datos: datos_dashboard_contratos.csv
+// Tabla en Power BI: Contratos
+// ============================================================
+// Columnas disponibles:
+//   id_obligacion, tipo, entidad_relacionada, fecha_inicio,
+//   fecha_vencimiento, valor_usd, responsable_interno,
+//   dias_para_vencer, estado_semaforo
+// ============================================================
+
+
+// ────────────────────────────────────────────────────────────
+// COLUMNAS CALCULADAS
+// ────────────────────────────────────────────────────────────
+
+// Agregar en: Contratos > Nueva columna
+
+Estado Semaforo Calc =
+    VAR DiasRestantes = Contratos[dias_para_vencer]
+    RETURN
+        SWITCH(
+            TRUE(),
+            DiasRestantes < 15,  "Rojo",
+            DiasRestantes <= 30, "Amarillo",
+            "Verde"
+        )
+
+Mes Vencimiento =
+    FORMAT( Contratos[fecha_vencimiento], "YYYY-MM" )
+
+Trimestre =
+    "T" & FORMAT( Contratos[fecha_vencimiento], "Q" )
+        & " " & YEAR( Contratos[fecha_vencimiento] )
+
+
+// ────────────────────────────────────────────────────────────
+// MEDIDAS BASE — CONTEOS GENERALES
+// ────────────────────────────────────────────────────────────
+
+Total Contratos =
+    COUNTROWS( Contratos )
+
+Contratos Activos =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] >= 0
+    )
+
+Contratos Vencidos =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] < 0
+    )
+
+
+// ────────────────────────────────────────────────────────────
+// MEDIDAS DE SEMAFORO
+// ────────────────────────────────────────────────────────────
+
+Contratos Rojo =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] < 15
+    )
+
+Contratos Amarillo =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] >= 15,
+        Contratos[dias_para_vencer] <= 30
+    )
+
+Contratos Verde =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] > 30
+    )
+
+Pct Contratos en Riesgo =
+    VAR Rojo = [Contratos Rojo]
+    VAR Amarillo = [Contratos Amarillo]
+    VAR Total = [Total Contratos]
+    RETURN
+        DIVIDE( Rojo + Amarillo, Total, 0 )
+
+// Formato sugerido: porcentaje con 1 decimal
+
+
+// ────────────────────────────────────────────────────────────
+// DIAS PROMEDIO PARA VENCIMIENTO
+// ────────────────────────────────────────────────────────────
+
+Dias Promedio para Vencimiento =
+    AVERAGE( Contratos[dias_para_vencer] )
+
+Dias Promedio Activos =
+    CALCULATE(
+        AVERAGE( Contratos[dias_para_vencer] ),
+        Contratos[dias_para_vencer] >= 0
+    )
+
+
+// ────────────────────────────────────────────────────────────
+// MONTO TOTAL COMPROMETIDO
+// ────────────────────────────────────────────────────────────
+
+Monto Total Comprometido =
+    SUM( Contratos[valor_usd] )
+
+Monto en Riesgo =
+    CALCULATE(
+        SUM( Contratos[valor_usd] ),
+        Contratos[dias_para_vencer] < 15
+    )
+
+Monto Alerta =
+    CALCULATE(
+        SUM( Contratos[valor_usd] ),
+        Contratos[dias_para_vencer] >= 15,
+        Contratos[dias_para_vencer] <= 30
+    )
+
+Monto Rojo y Amarillo =
+    [Monto en Riesgo] + [Monto Alerta]
+
+
+// ────────────────────────────────────────────────────────────
+// CONTRATOS QUE VENCEN ESTA SEMANA / ESTE MES
+// ────────────────────────────────────────────────────────────
+
+Contratos que Vencen Esta Semana =
+    VAR Hoy = TODAY()
+    VAR FinSemana = Hoy + 7 - WEEKDAY( Hoy, 2 )
+    RETURN
+        CALCULATE(
+            COUNTROWS( Contratos ),
+            Contratos[fecha_vencimiento] >= Hoy,
+            Contratos[fecha_vencimiento] <= FinSemana
+        )
+
+Contratos que Vencen Este Mes =
+    VAR Hoy = TODAY()
+    VAR FinMes = EOMONTH( Hoy, 0 )
+    RETURN
+        CALCULATE(
+            COUNTROWS( Contratos ),
+            Contratos[fecha_vencimiento] >= Hoy,
+            Contratos[fecha_vencimiento] <= FinMes
+        )
+
+
+// ────────────────────────────────────────────────────────────
+// KPI SEMAFORO GENERAL (texto basado en % rojo)
+// ────────────────────────────────────────────────────────────
+
+KPI Semaforo General =
+    VAR PctRojo =
+        DIVIDE(
+            [Contratos Rojo],
+            [Total Contratos],
+            0
+        )
+    RETURN
+        SWITCH(
+            TRUE(),
+            PctRojo > 0.30, "CRITICO - Mas del 30% en rojo",
+            PctRojo > 0.15, "ALERTA - Entre 15% y 30% en rojo",
+            PctRojo > 0.05, "PRECAUCION - Entre 5% y 15% en rojo",
+            "ESTABLE - Menos del 5% en rojo"
+        )
+
+KPI Semaforo Color =
+    VAR PctRojo =
+        DIVIDE(
+            [Contratos Rojo],
+            [Total Contratos],
+            0
+        )
+    RETURN
+        SWITCH(
+            TRUE(),
+            PctRojo > 0.30, "Rojo",
+            PctRojo > 0.15, "Amarillo",
+            "Verde"
+        )
+
+
+// ────────────────────────────────────────────────────────────
+// CONTRATOS POR TIPO DE OBLIGACION
+// ────────────────────────────────────────────────────────────
+
+// Usar en una matriz o tabla con Contratos[tipo] en filas.
+
+Contratos por Tipo =
+    COUNTROWS( Contratos )
+
+// Para usar en un grafico de barras apiladas por semaforo:
+Contratos Rojo por Tipo =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] < 15
+    )
+
+Contratos Amarillo por Tipo =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] >= 15,
+        Contratos[dias_para_vencer] <= 30
+    )
+
+Contratos Verde por Tipo =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] > 30
+    )
+
+
+// ────────────────────────────────────────────────────────────
+// CONTRATOS POR RESPONSABLE
+// ────────────────────────────────────────────────────────────
+
+// Usar en una matriz con Contratos[responsable_interno] en filas.
+
+Contratos por Responsable =
+    COUNTROWS( Contratos )
+
+Monto por Responsable =
+    SUM( Contratos[valor_usd] )
+
+Riesgo por Responsable =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] < 15
+    )
+
+
+// ────────────────────────────────────────────────────────────
+// TREND: VENCIMIENTOS POR MES (para grafico de lineas)
+// ────────────────────────────────────────────────────────────
+
+// Usar con la columna calculada [Mes Vencimiento] en el eje X.
+
+Vencimientos por Mes =
+    COUNTROWS( Contratos )
+
+Monto Vencimientos por Mes =
+    SUM( Contratos[valor_usd] )
+
+// Para un grafico de lineas con solo contratos futuros:
+Vencimientos Futuros por Mes =
+    CALCULATE(
+        COUNTROWS( Contratos ),
+        Contratos[dias_para_vencer] >= 0
+    )
+
+
+// ────────────────────────────────────────────────────────────
+// RUNNING COUNT: ACUMULADO DE CONTRATOS VENCIDOS
+// ────────────────────────────────────────────────────────────
+
+// Usar con fecha_vencimiento o [Mes Vencimiento] en el eje X.
+
+Acumulado Contratos Vencidos =
+    VAR FechaActual = MAX( Contratos[fecha_vencimiento] )
+    RETURN
+        CALCULATE(
+            COUNTROWS( Contratos ),
+            Contratos[fecha_vencimiento] <= FechaActual,
+            Contratos[dias_para_vencer] < 0,
+            ALL( Contratos )
+        )
+
+Acumulado Monto Vencido =
+    VAR FechaActual = MAX( Contratos[fecha_vencimiento] )
+    RETURN
+        CALCULATE(
+            SUM( Contratos[valor_usd] ),
+            Contratos[fecha_vencimiento] <= FechaActual,
+            Contratos[dias_para_vencer] < 0,
+            ALL( Contratos )
+        )
+
+
+// ============================================================
+// FIN DE MEDIDAS DAX
+// ============================================================

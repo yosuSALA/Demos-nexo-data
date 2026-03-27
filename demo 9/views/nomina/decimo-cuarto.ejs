@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+<h1>Décimo Cuarto Sueldo (Bono Escolar)</h1>
+
+<form class="filter-bar" method="GET" action="/nomina/decimo-cuarto">
+  <label>Año:</label>
+  <input type="number" name="anio" value="<%= anio %>" min="2020" max="2030" class="input" style="width:100px">
+  <button type="submit" class="btn btn-secondary">Calcular</button>
+</form>
+
+<p class="subtitle">Un SBU proporcional a los días trabajados en el período</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Empleado</th>
+      <th>Región</th>
+      <th>Período</th>
+      <th>SBU</th>
+      <th>Días Trabajados</th>
+      <th>Valor Décimo Cuarto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% detalles.forEach(d => { %>
+      <tr>
+        <td><%= d.empleado %></td>
+        <td><%= d.region %></td>
+        <td><%= d.periodo %></td>
+        <td><%= formatMoney(d.sbu) %></td>
+        <td><%= d.dias_trabajados %></td>
+        <td><strong><%= formatMoney(d.valor) %></strong></td>
+      </tr>
+    <% }) %>
+    <tr class="total-row">
+      <td colspan="5"><strong>TOTAL</strong></td>
+      <td><strong><%= formatMoney(total) %></strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

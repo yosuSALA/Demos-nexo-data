@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+
+<h1>Reportes y Exportaciones</h1>
+
+<div class="grid-2">
+  <div class="panel">
+    <h3>Roles de Pago (PDF)</h3>
+    <p>Genere los roles de pago individuales desde la vista de Nómina.</p>
+    <a href="/nomina" class="btn btn-primary">Ir a Nómina</a>
+  </div>
+
+  <div class="panel">
+    <h3>Planilla IESS (CSV)</h3>
+    <p>Archivo plano con la información de aportes para carga al sistema del IESS.</p>
+    <form action="/reportes/csv/iess/" class="form-inline" id="form-iess">
+      <select id="iess-mes" class="input" style="width:120px">
+        <% for (let i = 1; i <= 12; i++) { %>
+          <option value="<%= i %>"><%= meses[i] %></option>
+        <% } %>
+      </select>
+      <input type="number" id="iess-anio" value="2026" class="input" style="width:80px">
+      <button type="button" class="btn btn-info" onclick="window.location='/reportes/csv/iess/'+document.getElementById('iess-mes').value+'/'+document.getElementById('iess-anio').value">Descargar</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h3>Transferencias Bancarias (CSV)</h3>
+    <p>Archivo para Cash Management con los datos de pago de nómina aprobada.</p>
+    <form class="form-inline" id="form-banco">
+      <select id="banco-mes" class="input" style="width:120px">
+        <% for (let i = 1; i <= 12; i++) { %>
+          <option value="<%= i %>"><%= meses[i] %></option>
+        <% } %>
+      </select>
+      <input type="number" id="banco-anio" value="2026" class="input" style="width:80px">
+      <button type="button" class="btn btn-success" onclick="window.location='/reportes/csv/banco/'+document.getElementById('banco-mes').value+'/'+document.getElementById('banco-anio').value">Descargar</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h3>Beneficios Sociales</h3>
+    <ul>
+      <li><a href="/nomina/decimo-tercero">Décimo Tercer Sueldo</a></li>
+      <li><a href="/nomina/decimo-cuarto">Décimo Cuarto Sueldo</a></li>
+      <li><a href="/nomina/vacaciones">Control de Vacaciones</a></li>
+      <li><a href="/nomina/utilidades">Participación de Utilidades</a></li>
+    </ul>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

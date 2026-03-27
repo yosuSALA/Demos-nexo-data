@@ -1,0 +1,88 @@
+<%- include('../partials/header') %>
+
+<h1>Configuración del Sistema</h1>
+
+<form class="filter-bar" method="GET" action="/configuracion">
+  <label>Año:</label>
+  <input type="number" name="anio" value="<%= anio %>" min="2020" max="2030" class="input" style="width:100px">
+  <button type="submit" class="btn btn-secondary">Ver</button>
+  <a href="/configuracion/prestamos" class="btn btn-info">Gestionar Préstamos</a>
+</form>
+
+<div class="grid-2">
+  <div class="panel">
+    <h2>Parámetros Laborales y Tributarios</h2>
+    <form method="POST" action="/configuracion">
+      <input type="hidden" name="anio" value="<%= anio %>">
+      <table class="detail-table">
+        <% configs.forEach(c => { %>
+          <tr>
+            <td><%= c.descripcion %></td>
+            <td>
+              <input type="text" name="config_<%= c.clave %>" value="<%= c.valor %>" class="input input-sm">
+            </td>
+          </tr>
+        <% }) %>
+      </table>
+      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>Feriados <%= anio %></h2>
+    <table class="table table-sm">
+      <thead>
+        <tr><th>Fecha</th><th>Descripción</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% feriados.forEach(f => { %>
+          <tr>
+            <td><%= f.fecha %></td>
+            <td><%= f.descripcion %></td>
+            <td>
+              <form method="POST" action="/configuracion/feriados/<%= f.id %>/eliminar" style="display:inline">
+                <button type="submit" class="btn btn-sm btn-danger">X</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <form method="POST" action="/configuracion/feriados" class="form-inline" style="margin-top:10px">
+      <input type="hidden" name="anio" value="<%= anio %>">
+      <input type="date" name="fecha" required class="input input-sm">
+      <input type="text" name="descripcion" required placeholder="Descripción" class="input input-sm">
+      <button type="submit" class="btn btn-sm btn-primary">+ Agregar</button>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Tabla de Impuesto a la Renta <%= anio %></h2>
+  <form method="POST" action="/configuracion/tabla-ir">
+    <input type="hidden" name="anio" value="<%= anio %>">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>Fracción Básica</th>
+          <th>Exceso Hasta</th>
+          <th>Impuesto Fracción</th>
+          <th>% Excedente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% tablaIR.forEach(t => { %>
+          <tr>
+            <td><input type="number" name="fraccion_basica" value="<%= t.fraccion_basica %>" step="0.01" class="input input-sm"></td>
+            <td><input type="number" name="exceso_hasta" value="<%= t.exceso_hasta %>" step="0.01" class="input input-sm"></td>
+            <td><input type="number" name="impuesto_fraccion" value="<%= t.impuesto_fraccion %>" step="0.01" class="input input-sm"></td>
+            <td><input type="number" name="porcentaje_excedente" value="<%= t.porcentaje_excedente %>" step="0.01" class="input input-sm"></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Actualizar Tabla IR</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,96 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+  <h1><%= empleado.apellidos %> <%= empleado.nombres %></h1>
+  <div>
+    <a href="/empleados/<%= empleado.id %>/editar" class="btn btn-secondary">Editar</a>
+    <% if (empleado.activo) { %>
+      <form method="POST" action="/empleados/<%= empleado.id %>/desactivar" style="display:inline">
+        <input type="date" name="fecha_salida" value="<%= new Date().toISOString().split('T')[0] %>" class="input input-sm">
+        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Desactivar empleado?')">Desactivar</button>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="panel">
+    <h3>Información Personal</h3>
+    <table class="detail-table">
+      <tr><td>Cédula</td><td><strong><%= empleado.cedula %></strong></td></tr>
+      <tr><td>Fecha Nacimiento</td><td><%= empleado.fecha_nacimiento || 'N/A' %></td></tr>
+      <tr><td>Email</td><td><%= empleado.email || 'N/A' %></td></tr>
+      <tr><td>Teléfono</td><td><%= empleado.telefono || 'N/A' %></td></tr>
+      <tr><td>Dirección</td><td><%= empleado.direccion || 'N/A' %></td></tr>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3>Información Laboral</h3>
+    <table class="detail-table">
+      <tr><td>Cargo</td><td><%= empleado.cargo %></td></tr>
+      <tr><td>Departamento</td><td><%= empleado.departamento || 'N/A' %></td></tr>
+      <tr><td>Sueldo Base</td><td><strong><%= formatMoney(empleado.sueldo_base) %></strong></td></tr>
+      <tr><td>Contrato</td><td><span class="badge badge-<%= empleado.tipo_contrato === 'Indefinido' ? 'green' : 'orange' %>"><%= empleado.tipo_contrato %></span></td></tr>
+      <tr><td>Región</td><td><%= empleado.region %></td></tr>
+      <tr><td>Fecha Ingreso</td><td><%= empleado.fecha_ingreso %></td></tr>
+      <tr><td>Cargas Familiares</td><td><%= empleado.cargas_familiares %></td></tr>
+      <tr><td>Banco</td><td><%= empleado.banco || 'N/A' %> - <%= empleado.cuenta_bancaria || 'N/A' %></td></tr>
+      <tr><td>Estado</td><td><span class="badge badge-<%= empleado.activo ? 'green' : 'red' %>"><%= empleado.activo ? 'Activo' : 'Inactivo' %></span></td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>Últimos Roles de Pago</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Período</th>
+      <th>Ingresos</th>
+      <th>Deducciones</th>
+      <th>Neto</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (roles.length === 0) { %>
+      <tr><td colspan="6" class="text-center">Sin roles generados.</td></tr>
+    <% } %>
+    <% roles.forEach(r => { %>
+      <tr>
+        <td><%= r.periodo %></td>
+        <td><%= formatMoney(r.total_ingresos) %></td>
+        <td><%= formatMoney(r.total_deducciones) %></td>
+        <td><strong><%= formatMoney(r.neto_a_recibir) %></strong></td>
+        <td><span class="badge badge-<%= r.estado === 'Aprobado' ? 'green' : 'orange' %>"><%= r.estado %></span></td>
+        <td>
+          <a href="/nomina/rol/<%= r.id %>" class="btn btn-sm btn-info">Ver</a>
+          <a href="/reportes/pdf/rol/<%= r.id %>" class="btn btn-sm btn-secondary" target="_blank">PDF</a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<h2>Permisos Recientes</h2>
+<table class="table">
+  <thead>
+    <tr><th>Tipo</th><th>Fechas</th><th>Días</th><th>Estado</th></tr>
+  </thead>
+  <tbody>
+    <% if (permisos.length === 0) { %>
+      <tr><td colspan="4" class="text-center">Sin permisos registrados.</td></tr>
+    <% } %>
+    <% permisos.forEach(p => { %>
+      <tr>
+        <td><%= p.tipo %></td>
+        <td><%= p.fecha_inicio %> a <%= p.fecha_fin %></td>
+        <td><%= p.dias %></td>
+        <td><span class="badge badge-<%= p.estado === 'Aprobado' ? 'green' : p.estado === 'Rechazado' ? 'red' : 'orange' %>"><%= p.estado %></span></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

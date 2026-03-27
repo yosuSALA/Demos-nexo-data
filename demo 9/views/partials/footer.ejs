@@ -1,0 +1,59 @@
+  </main>
+  <footer class="footer animate-fade-in-up animate-delay-4">
+    <p><i class="fa-solid fa-shield-halved"></i> Sistema de Nómina Ecuador &copy; <%= new Date().getFullYear() %> | Parametrizado bajo el Código del Trabajo</p>
+  </footer>
+  <script src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
+      const currentTheme = localStorage.getItem('theme');
+      if (currentTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+          const newTheme = isDark ? 'light' : 'dark';
+
+          if (!document.startViewTransition) {
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            return;
+          }
+
+          const x = e.clientX || window.innerWidth / 2;
+          const y = e.clientY || window.innerHeight / 2;
+          const endRadius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+          );
+
+          const transition = document.startViewTransition(() => {
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+          });
+
+          transition.ready.then(() => {
+            const clipPath = [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${endRadius}px at ${x}px ${y}px)`
+            ];
+            document.documentElement.animate(
+              {
+                clipPath: isDark ? clipPath : [...clipPath].reverse()
+              },
+              {
+                duration: 600,
+                easing: 'ease-in-out',
+                pseudoElement: isDark ? '::view-transition-new(root)' : '::view-transition-old(root)'
+              }
+            );
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

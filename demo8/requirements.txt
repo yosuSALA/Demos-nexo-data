@@ -1,0 +1,6 @@
+pandas>=2.0
+faker>=24.0
+streamlit>=1.35
+plotly>=5.20
+apscheduler>=3.10
+python-dotenv>=1.0

@@ -1,0 +1,54 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+  <h1>Utilidades <%= utilidad.anio %> - Detalle</h1>
+  <a href="/nomina/utilidades" class="btn btn-secondary">Volver</a>
+</div>
+
+<div class="cards">
+  <div class="card card-blue">
+    <h3>Utilidad Líquida</h3>
+    <span class="card-number"><%= formatMoney(utilidad.utilidad_liquida) %></span>
+  </div>
+  <div class="card card-green">
+    <h3>15% Total</h3>
+    <span class="card-number"><%= formatMoney(utilidad.total_15_porciento) %></span>
+  </div>
+  <div class="card card-purple">
+    <h3>10% Equitativo</h3>
+    <span class="card-number"><%= formatMoney(utilidad.total_10_porciento) %></span>
+  </div>
+  <div class="card card-orange">
+    <h3>5% Cargas</h3>
+    <span class="card-number"><%= formatMoney(utilidad.total_5_porciento) %></span>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Cédula</th>
+      <th>Empleado</th>
+      <th>Días Trabajados</th>
+      <th>Cargas Familiares</th>
+      <th>Valor 10%</th>
+      <th>Valor 5%</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% detalles.forEach(d => { %>
+      <tr>
+        <td><%= d.cedula %></td>
+        <td><%= d.apellidos %> <%= d.nombres %></td>
+        <td><%= d.dias_trabajados %></td>
+        <td><%= d.cargas_familiares %></td>
+        <td><%= formatMoney(d.valor_10) %></td>
+        <td><%= formatMoney(d.valor_5) %></td>
+        <td><strong><%= formatMoney(d.total) %></strong></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

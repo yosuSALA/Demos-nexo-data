@@ -1,0 +1,99 @@
+<%- include('../partials/header') %>
+
+<h1>Nómina - Roles de Pago</h1>
+
+<form class="filter-bar" method="GET" action="/nomina">
+  <select name="mes" class="input">
+    <% for (let i = 1; i <= 12; i++) { %>
+      <option value="<%= i %>" <%= i === mes ? 'selected' : '' %>><%= meses[i] %></option>
+    <% } %>
+  </select>
+  <input type="number" name="anio" value="<%= anio %>" min="2020" max="2030" class="input" style="width:100px">
+  <button type="submit" class="btn btn-secondary">Ver</button>
+
+  <form method="POST" action="/nomina/generar" style="display:inline">
+    <input type="hidden" name="mes" value="<%= mes %>">
+    <input type="hidden" name="anio" value="<%= anio %>">
+    <button type="submit" class="btn btn-primary" onclick="return confirm('Generar/recalcular nómina para todos los empleados?')">Generar Nómina</button>
+  </form>
+
+  <form method="POST" action="/nomina/aprobar" style="display:inline">
+    <input type="hidden" name="mes" value="<%= mes %>">
+    <input type="hidden" name="anio" value="<%= anio %>">
+    <button type="submit" class="btn btn-success" onclick="return confirm('Aprobar toda la nómina del mes?')">Aprobar Todo</button>
+  </form>
+</form>
+
+<% if (totales && totales.num_empleados > 0) { %>
+<div class="cards">
+  <div class="card card-blue">
+    <h3>Empleados</h3>
+    <span class="card-number"><%= totales.num_empleados %></span>
+  </div>
+  <div class="card card-green">
+    <h3>Total Ingresos</h3>
+    <span class="card-number"><%= formatMoney(totales.total_ingresos) %></span>
+  </div>
+  <div class="card card-orange">
+    <h3>Total Deducciones</h3>
+    <span class="card-number"><%= formatMoney(totales.total_deducciones) %></span>
+  </div>
+  <div class="card card-purple">
+    <h3>Total Neto</h3>
+    <span class="card-number"><%= formatMoney(totales.total_neto) %></span>
+  </div>
+</div>
+<% } %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Cédula</th>
+      <th>Empleado</th>
+      <th>Cargo</th>
+      <th>Sueldo</th>
+      <th>H. Extra</th>
+      <th>Total Ing.</th>
+      <th>IESS</th>
+      <th>IR</th>
+      <th>Total Ded.</th>
+      <th>Neto</th>
+      <th>Estado</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (roles.length === 0) { %>
+      <tr><td colspan="12" class="text-center">No hay roles generados para este período. Haga clic en "Generar Nómina".</td></tr>
+    <% } %>
+    <% roles.forEach(r => { %>
+      <tr>
+        <td><%= r.cedula %></td>
+        <td><%= r.apellidos %> <%= r.nombres %></td>
+        <td><%= r.cargo %></td>
+        <td><%= formatMoney(r.sueldo_base) %></td>
+        <td><%= formatMoney(r.horas_suplementarias_valor + r.horas_extraordinarias_valor) %></td>
+        <td><%= formatMoney(r.total_ingresos) %></td>
+        <td><%= formatMoney(r.aporte_iess) %></td>
+        <td><%= formatMoney(r.retencion_ir) %></td>
+        <td><%= formatMoney(r.total_deducciones) %></td>
+        <td><strong><%= formatMoney(r.neto_a_recibir) %></strong></td>
+        <td><span class="badge badge-<%= r.estado === 'Aprobado' ? 'green' : 'orange' %>"><%= r.estado %></span></td>
+        <td>
+          <a href="/nomina/rol/<%= r.id %>" class="btn btn-sm btn-info">Det.</a>
+          <a href="/reportes/pdf/rol/<%= r.id %>" class="btn btn-sm btn-secondary" target="_blank">PDF</a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<% if (roles.length > 0) { %>
+<div class="export-bar">
+  <h3>Exportar</h3>
+  <a href="/reportes/csv/iess/<%= mes %>/<%= anio %>" class="btn btn-info">Planilla IESS (CSV)</a>
+  <a href="/reportes/csv/banco/<%= mes %>/<%= anio %>" class="btn btn-success">Transferencias Bancarias (CSV)</a>
+</div>
+<% } %>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,49 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+  <h1>Empleados</h1>
+  <a href="/empleados/nuevo" class="btn btn-primary">+ Nuevo Empleado</a>
+</div>
+
+<form class="filter-bar" method="GET" action="/empleados">
+  <input type="text" name="q" placeholder="Buscar por cédula, nombre..." value="<%= filtro %>" class="input">
+  <label><input type="checkbox" name="activo" value="0" <%= activo === 0 ? 'checked' : '' %>> Mostrar inactivos</label>
+  <button type="submit" class="btn btn-secondary">Buscar</button>
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Cédula</th>
+      <th>Apellidos y Nombres</th>
+      <th>Cargo</th>
+      <th>Departamento</th>
+      <th>Sueldo Base</th>
+      <th>Contrato</th>
+      <th>Región</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (empleados.length === 0) { %>
+      <tr><td colspan="8" class="text-center">No se encontraron empleados.</td></tr>
+    <% } %>
+    <% empleados.forEach(e => { %>
+      <tr>
+        <td><%= e.cedula %></td>
+        <td><strong><%= e.apellidos %></strong> <%= e.nombres %></td>
+        <td><%= e.cargo %></td>
+        <td><%= e.departamento || '-' %></td>
+        <td><%= formatMoney(e.sueldo_base) %></td>
+        <td><span class="badge badge-<%= e.tipo_contrato === 'Indefinido' ? 'green' : 'orange' %>"><%= e.tipo_contrato %></span></td>
+        <td><%= e.region %></td>
+        <td>
+          <a href="/empleados/<%= e.id %>" class="btn btn-sm btn-info">Ver</a>
+          <a href="/empleados/<%= e.id %>/editar" class="btn btn-sm btn-secondary">Editar</a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

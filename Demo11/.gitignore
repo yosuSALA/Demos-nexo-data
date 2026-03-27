@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# Data & Logs
+*.log
+output/
+data/
+*.duckdb
+*.db
+*.parquet
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Configuracion local de la app
+config/
+
+# OS
+.DS_Store
+Thumbs.db
+.vscode/

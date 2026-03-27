@@ -1,0 +1,231 @@
+// ============================================================================
+// MEDIDAS DAX - Conciliación Bancaria Automática
+// ============================================================================
+//
+// MODELO DE DATOS
+// ---------------
+// Origen: archivo Excel "reporte_conciliacion.xlsx" con 3 hojas (tablas):
+//
+// 1) Conciliados
+//    Columnas: referencia, monto, fecha_banco, descripcion_banco,
+//              fecha_contabilidad, concepto_contable, comprobante,
+//              desfase_dias, estado
+//
+// 2) Faltantes_en_Banco
+//    (Partidas registradas en contabilidad pero NO en el extracto bancario)
+//    Columnas: fecha_registro, comprobante, concepto, referencia,
+//              tipo, monto, estado
+//
+// 3) Faltantes_en_Contabilidad
+//    (Partidas del banco NO registradas en contabilidad)
+//    Columnas: fecha_transaccion, descripcion, referencia,
+//              tipo, monto, estado
+//
+// RELACIONES
+// ----------
+// Las tres tablas son independientes (modelo tipo estrella plana).
+// No se requieren relaciones directas entre ellas.
+// Se pueden unificar mediante una tabla calendario compartida si se desea
+// analizar tendencias temporales cruzadas.
+//
+// ============================================================================
+
+
+// ---------------------------------------------------------------------------
+// KPIs PRINCIPALES
+// ---------------------------------------------------------------------------
+
+Total Transacciones =
+    COUNTROWS(Conciliados)
+    + COUNTROWS(Faltantes_en_Banco)
+    + COUNTROWS(Faltantes_en_Contabilidad)
+
+Total Conciliadas =
+    COUNTROWS(Conciliados)
+
+Total Faltantes Banco =
+    COUNTROWS(Faltantes_en_Banco)
+
+Total Faltantes Contabilidad =
+    COUNTROWS(Faltantes_en_Contabilidad)
+
+
+// ---------------------------------------------------------------------------
+// TASA DE CONCILIACIÓN
+// ---------------------------------------------------------------------------
+
+% Tasa de Conciliación =
+    DIVIDE(
+        [Total Conciliadas],
+        [Total Transacciones],
+        0
+    )
+
+
+// ---------------------------------------------------------------------------
+// MONTOS
+// ---------------------------------------------------------------------------
+
+Monto Total Conciliado =
+    SUM(Conciliados[monto])
+
+Monto Faltante Banco =
+    SUM(Faltantes_en_Banco[monto])
+
+Monto Faltante Contabilidad =
+    SUM(Faltantes_en_Contabilidad[monto])
+
+% Monto Conciliado vs Total =
+    VAR _montoTotal =
+        [Monto Total Conciliado]
+        + [Monto Faltante Banco]
+        + [Monto Faltante Contabilidad]
+    RETURN
+        DIVIDE(
+            [Monto Total Conciliado],
+            _montoTotal,
+            0
+        )
+
+
+// ---------------------------------------------------------------------------
+// DESFASE DE DÍAS
+// ---------------------------------------------------------------------------
+
+Promedio Desfase Días =
+    AVERAGE(Conciliados[desfase_dias])
+
+Partidas con Desfase Mayor a 2 Días =
+    COUNTROWS(
+        FILTER(
+            Conciliados,
+            Conciliados[desfase_dias] > 2
+        )
+    )
+
+
+// ---------------------------------------------------------------------------
+// SEMÁFORO DE CONCILIACIÓN
+// ---------------------------------------------------------------------------
+
+Semáforo Conciliación =
+    VAR _tasa = [% Tasa de Conciliación]
+    RETURN
+        SWITCH(
+            TRUE(),
+            _tasa > 0.90, "Óptimo",
+            _tasa > 0.75, "Aceptable",
+            "Crítico"
+        )
+
+
+// ---------------------------------------------------------------------------
+// MONTO EN RIESGO
+// ---------------------------------------------------------------------------
+
+Monto en Riesgo =
+    [Monto Faltante Banco] + [Monto Faltante Contabilidad]
+
+
+// ---------------------------------------------------------------------------
+// CONCILIADAS POR TIPO (Depósito vs Retiro)
+// ---------------------------------------------------------------------------
+// Nota: La tabla Conciliados no tiene columna "tipo" directamente,
+// pero se puede inferir a partir de la descripcion_banco o cruzar
+// con las tablas originales. Si se agrega una columna "tipo" a la
+// hoja Conciliados en el Excel, usar las siguientes medidas:
+
+Conciliadas Depósito =
+    COUNTROWS(
+        FILTER(
+            Faltantes_en_Contabilidad,
+            FALSE()
+        )
+    )
+    +
+    CALCULATE(
+        COUNTROWS(Conciliados),
+        FILTER(
+            Conciliados,
+            CONTAINSSTRING(Conciliados[descripcion_banco], "Depósito")
+                || CONTAINSSTRING(Conciliados[descripcion_banco], "recibida")
+                || CONTAINSSTRING(Conciliados[descripcion_banco], "Cobro")
+                || CONTAINSSTRING(Conciliados[descripcion_banco], "Abono")
+        )
+    )
+
+// Alternativa recomendada: agregar columna "tipo" a la hoja Conciliados
+// en el script Python y luego usar:
+//
+// Conciliadas Depósito =
+//     CALCULATE(
+//         COUNTROWS(Conciliados),
+//         Conciliados[tipo] = "Depósito"
+//     )
+//
+// Conciliadas Retiro =
+//     CALCULATE(
+//         COUNTROWS(Conciliados),
+//         Conciliados[tipo] = "Retiro"
+//     )
+
+
+// ---------------------------------------------------------------------------
+// TOTAL ACUMULADO (RUNNING TOTAL) DE CONCILIACIONES POR FECHA
+// ---------------------------------------------------------------------------
+
+Running Total Conciliaciones =
+    CALCULATE(
+        COUNTROWS(Conciliados),
+        FILTER(
+            ALL(Conciliados[fecha_banco]),
+            Conciliados[fecha_banco] <= MAX(Conciliados[fecha_banco])
+        )
+    )
+
+Running Total Monto Conciliado =
+    CALCULATE(
+        SUM(Conciliados[monto]),
+        FILTER(
+            ALL(Conciliados[fecha_banco]),
+            Conciliados[fecha_banco] <= MAX(Conciliados[fecha_banco])
+        )
+    )
+
+
+// ---------------------------------------------------------------------------
+// COLUMNA CALCULADA: Rango de Monto
+// ---------------------------------------------------------------------------
+// Agregar como columna calculada en la tabla Conciliados:
+
+Rango de Monto =
+    SWITCH(
+        TRUE(),
+        Conciliados[monto] <= 500, "0 - 500",
+        Conciliados[monto] <= 2000, "500 - 2,000",
+        Conciliados[monto] <= 5000, "2,000 - 5,000",
+        Conciliados[monto] <= 15000, "5,000 - 15,000",
+        "Mayor a 15,000"
+    )
+
+// Para Faltantes_en_Banco:
+// Rango de Monto =
+//     SWITCH(
+//         TRUE(),
+//         Faltantes_en_Banco[monto] <= 500, "0 - 500",
+//         Faltantes_en_Banco[monto] <= 2000, "500 - 2,000",
+//         Faltantes_en_Banco[monto] <= 5000, "2,000 - 5,000",
+//         Faltantes_en_Banco[monto] <= 15000, "5,000 - 15,000",
+//         "Mayor a 15,000"
+//     )
+//
+// Para Faltantes_en_Contabilidad:
+// Rango de Monto =
+//     SWITCH(
+//         TRUE(),
+//         Faltantes_en_Contabilidad[monto] <= 500, "0 - 500",
+//         Faltantes_en_Contabilidad[monto] <= 2000, "500 - 2,000",
+//         Faltantes_en_Contabilidad[monto] <= 5000, "2,000 - 5,000",
+//         Faltantes_en_Contabilidad[monto] <= 15000, "5,000 - 15,000",
+//         "Mayor a 15,000"
+//     )
