@@ -16,7 +16,7 @@ Catálogo de demos técnicas y productos automatizados de Nexo Data Consulting p
 | 4 | Bot de conciliación bancaria | ✅ Hecho | [CHAHCA] / Josue |
 | 5 | Dashboard de ventas en tiempo real | ⏳ Pendiente | Mathew / [CHACHA] |
 | 6 | Generador automático de ATS (SRI) | ✅ Hecho | Josue |
-| 7 | Bot envío masivo de reportes por email | ✅ Hecho | [Amigo BG] / Josue |
+| 7 | Bot envío masivo de reportes por email | ✅ Hecho | [Amigo BG] (Danilo) / Josue |
 | 8 | Monitor de vencimiento de contratos | ✅ Hecho | Mathew / Josue |
 | 9 | Portal de asistencia de empleados (RRHH) | ✅ Hecho | Andrés / Josue |
 | 10 | Cotizador inteligente con IA | ✅ Hecho | Josue |
