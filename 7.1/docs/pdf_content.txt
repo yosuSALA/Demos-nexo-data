@@ -1,0 +1,420 @@
+NEXO DATA CONSULTING 
+Conectamos tus datos con decisiones inteligentes 
+DEMO #7 — VERSION RRHH 
+BOT DE ENVIO MASIVO DE REPORTES POR EMAIL 
+Empresa mediana con RRHH  |  App Web  |  3 Roles  |  Modo Confianza 
+Guayaquil, Ecuador  |  Marzo 2026 
+ 
+1. Contexto: Empresa Mediana con RRHH 
+El cliente objetivo de esta version de la Demo #7 es una empresa ecuatoriana de 50 a 500 
+empleados que tiene un departamento de Recursos Humanos. Todos los meses, RRHH genera y 
+distribuye documentos a sus empleados: roles de pago, comprobantes de beneficios, comunicados 
+oficiales, notificaciones de vacaciones, actualizaciones de politicas internas. 
+ 
+El dolor especifico en este segmento es diferente al de una fiduciaria. Aqui el volumen es menor 
+(50-500 personas), pero la frecuencia es alta (mensual o mas), hay informacion sensible y personal 
+involucrada, y existe una estructura jerarquica clara — RRHH no puede permitir que cualquier 
+empleado vea o toque los documentos de otro. 
+ 
+Ejemplos concretos de uso en RRHH 
+• Envio mensual de roles de pago en PDF a cada empleado (cada uno recibe solo el 
+suyo) 
+• Distribucion de comprobantes de decimo tercer y decimo cuarto sueldo 
+• Comunicados oficiales personalizados: 'Estimado [nombre], su vacacion aprobada 
+es del...' 
+• Notificaciones de vencimiento de contrato o renovacion a empleados especificos 
+• Envio masivo de encuestas de clima laboral o resultados de evaluacion 
+• Distribucion de certificados de capacitacion o constancias de trabajo 
+ 
+2. Sistema de Roles Disenado para RRHH 
+Con base en como funciona realmente un departamento de RRHH en una empresa mediana 
+ecuatoriana, el sistema tiene 3 roles. Cada uno refleja un perfil real que existe en esas empresas. 
+ 👑  ROL 1: ADMINISTRADOR — Jefe de RRHH o Gerente Admin 
+PUEDE: 
+• Conectar y desconectar la cuenta de correo corporativo (OAuth con Gmail o Outlook) 
+• Crear, editar y desactivar empleados en el sistema 
+• Importar la nomina completa desde Excel o CSV 
+• Crear y gestionar grupos: 'Planta Guayaquil', 'Administracion', 'Vendedores', etc. 
+• Crear usuarios del sistema y asignar su rol (Supervisor u Operador) 
+• Activar o desactivar el Modo Confianza para usuarios especificos (ver seccion 3) 
+• Ver el historial completo de todos los envios realizados 
+• Configurar plantillas de email corporativas 
+• Programar envios automaticos recurrentes 
+• Exportar logs completos para auditoria 
+NO PUEDE: 
+✘ Sin restricciones. Control total del sistema. 
+ 
+👁️  ROL 2: SUPERVISOR — Coordinador o Asistente Senior de RRHH 
+PUEDE: 
+• Ver la lista completa de empleados (lectura solamente, no puede editar) 
+• Crear un envio masivo: seleccionar grupo, subir PDFs, elegir plantilla 
+• Revisar en detalle un envio creado por un Operador antes de aprobarlo 
+• Aprobar o rechazar envios pendientes de Operadores sin Modo Confianza 
+• Ejecutar envios directamente sin necesitar aprobacion de nadie 
+• Activar Modo Confianza para un Operador especifico (ver seccion 3) 
+• Ver el historial de todos los envios del equipo 
+• Descargar logs y reportes de resultados 
+NO PUEDE: 
+✘ No puede agregar ni eliminar empleados del sistema 
+✘ No puede cambiar la configuracion de la cuenta de correo 
+✘ No puede crear ni eliminar cuentas de usuario del sistema 
+✘ No puede ver ni modificar la configuracion general de la app 
+ 
+⚙️  ROL 3: OPERADOR — Asistente de RRHH o Auxiliar Administrativo 
+PUEDE: 
+• Subir los PDFs para un envio especifico 
+• Seleccionar el grupo de empleados que le fue asignado 
+• Crear el envio y enviarlo a revision del Supervisor 
+• Si tiene Modo Confianza activo: ejecutar el envio directamente sin esperar aprobacion 
+• Ver el estado de los envios que el mismo ha creado 
+• Ver solo los empleados de los grupos que le asignaron (no ve nomina completa) NO PUEDE: 
+✘ No puede ver ni modificar datos de empleados de otros grupos 
+✘ No puede editar, agregar ni eliminar empleados del sistema 
+✘ No puede ver los envios de otros Operadores 
+✘ Sin Modo Confianza: no puede ejecutar un envio sin que el Supervisor lo apruebe 
+✘ No puede cambiar ninguna configuracion del sistema 
+El Operador es el perfil de un asistente que hace el trabajo operativo. Su nivel de autonomia 
+depende del Modo Confianza que le otorgue el Supervisor. 
+ 
+3. El Modo Confianza — La Feature Clave 
+Esta es la funcionalidad mas importante y diferenciadora del sistema de roles. El Modo Confianza 
+resuelve un problema real: no todos los Operadores necesitan el mismo nivel de supervision. Un 
+asistente nuevo necesita revision. Un asistente experimentado que lleva 2 anos haciendo lo mismo 
+no la necesita. 
+ 
+Definicion exacta del Modo Confianza 
+El Modo Confianza es un interruptor que el Supervisor (o Admin) puede activar 
+individualmente para cada Operador. Cuando esta activo, los envios de ese Operador se 
+ejecutan directamente sin pasar por el flujo de aprobacion. Cuando esta desactivado, cada 
+envio del Operador va a una cola de revision antes de salir. 
+ 
+El Supervisor tambien puede activar el Modo Confianza de forma global para todos los 
+Operadores a la vez, util durante periodos de volumen alto (cierre de mes, pago de 
+decimales) cuando no hay tiempo para revisar uno a uno. 
+ 
+3.1 Los dos estados del Modo Confianza 
+MODO CONFIANZA: DESACTIVADO MODO CONFIANZA: ACTIVADO 
+El Operador crea el envio. 
+El envio queda en estado 'Pendiente de 
+aprobacion'. 
+El Supervisor recibe una notificacion. 
+El Supervisor revisa y aprueba o rechaza. 
+Solo despues de la aprobacion el sistema envia 
+los correos. 
+ 
+Ideal para: Operadores nuevos, envios de alto 
+riesgo, periodos de auditoria. 
+El Operador crea el envio. 
+El sistema valida que todos los PDFs 
+correspondan a los destinatarios. 
+Si la validacion pasa: envio se ejecuta 
+automaticamente. 
+El Supervisor recibe un resumen del resultado 
+(no una solicitud). 
+El Operador ve el estado en tiempo real. 
+ 
+Ideal para: Operadores experimentados, envios 
+rutinarios de baja sensibilidad.  
+3.2 Como se activa el Modo Confianza en la app 
+Flujo desde la perspectiva del Supervisor 
+1. El Supervisor va a Configuracion > Usuarios del equipo 
+2. Ve la lista de Operadores con su estado actual de Modo Confianza (toggle on/off) 
+3. Hace click en el toggle de un Operador especifico para activarlo 
+4. La app pide confirmacion: 'Activar Modo Confianza para [nombre]? Sus envios 
+futuros se ejecutaran sin revision previa.' 
+5. Confirma. El cambio aplica inmediatamente para los proximos envios. 
+6. Para activar para TODOS: boton 'Modo Confianza Global' en la parte superior de la 
+misma pantalla. 
+El Admin tambien puede hacer esto desde Gestion de Usuarios. El cambio queda registrado en el log 
+del sistema con quien lo activo y cuando. 
+ 
+3.3 Salvaguarda de seguridad del Modo Confianza 
+El Modo Confianza no elimina la trazabilidad 
+• Aunque el Operador con Modo Confianza envia sin aprobacion, CADA envio queda 
+registrado en el log con: quien lo creo, a cuantos empleados, que PDFs se usaron, y 
+el resultado de cada correo. 
+• El Supervisor recibe un email de resumen automatico despues de cada envio de 
+Modo Confianza: 'Maria Torres envio 87 roles de pago. 87/87 exitosos.' 
+• Si un envio de Modo Confianza falla en mas del 10% de destinatarios, el sistema 
+pausa el envio y notifica al Supervisor para intervencion manual. 
+• El Admin puede desactivar el Modo Confianza Global en cualquier momento con un 
+solo click si hay una situacion de alerta. 
+ 
+4. Carga de Empleados: Las Dos Opciones 
+En el contexto de RRHH, los 'destinatarios' son los empleados de la empresa. El sistema ofrece 
+ambas formas de cargarlos, disenadas especificamente para el flujo de trabajo de un departamento 
+de nomina. 
+ 
+OPCION A — Importar desde Excel / CSV OPCION B — Base de datos interna 
+El Admin sube el Excel de nomina que ya 
+maneja RRHH. 
+La app detecta automaticamente las columnas: 
+nombre, cedula, email, departamento, cargo. 
+Los empleados viven en la app. El Admin los 
+gestiona directamente. El Admin confirma el mapeo y los empleados se 
+importan. 
+ 
+Ventaja: empieza a usar el sistema el mismo dia 
+sin reingreso de datos. 
+Ideal para: clientes que quieren resultado 
+inmediato. 
+Cada empleado tiene: nombre, cedula, email, 
+departamento, cargo, estado (activo/inactivo/en 
+prueba). 
+Los grupos se crean en la app: 'Planta', 'Admin', 
+'Ventas GYE', 'Ventas UIO'. 
+ 
+Ventaja: cuando un empleado renuncia, se 
+desactiva en la app. No recibe mas correos. 
+Ideal para: retencion a largo plazo del cliente. 
+ 
+Campo critico para RRHH: el PDF se mapea automaticamente al empleado 
+El punto mas delicado en envio de roles de pago es que el PDF correcto llegue al empleado 
+correcto. El sistema tiene un mecanismo de mapeo automatico basado en la cedula o el 
+codigo de empleado: 
+ 
+• El PDF se nombra con la cedula del empleado: 0912345678_rol_noviembre.pdf 
+• Al subir los PDFs, la app cruza automaticamente el nombre del archivo con el 
+campo cedula de la base de empleados 
+• Muestra una vista previa del mapeo antes de enviar: 'Carlos Mendoza (0912345678) 
+→ rol_noviembre.pdf — OK' 
+• Si algun PDF no tiene match, lo marca en rojo ANTES de ejecutar el envio 
+• No se puede ejecutar el envio si hay PDFs sin mapear — esto evita que un 
+empleado reciba el rol de pago de otro 
+ 
+5. Tabla Completa de Permisos por Rol 
+Accion Admin Supervisor Operador 
+Conectar cuenta de correo OAuth SI NO NO 
+Agregar / eliminar empleados SI NO NO 
+Importar nomina desde Excel/CSV SI SI NO 
+Ver lista completa de empleados SI SI (lectura) Solo su grupo 
+Crear grupos de empleados SI NO NO 
+Asignar grupos a Operadores SI SI NO 
+Crear envio masivo SI SI SI 
+Ejecutar envio directamente SI SI Solo con Modo 
+Confianza 
+Aprobar envio de Operador SI SI NO 
+Activar Modo Confianza individual SI SI NO Activar Modo Confianza global SI NO NO 
+Ver historial de todos los envios SI SI Solo los propios 
+Descargar logs y reportes SI SI NO 
+Gestionar usuarios y roles SI NO NO 
+Programar envios automaticos SI NO NO 
+Configurar plantillas de email SI NO NO 
+ 
+6. Escenario Real: Pago de Roles Mensuales 
+Empresa: Distribuidora mediana en Guayaquil. 120 empleados. 3 departamentos. 1 Supervisor de RRHH. 2 
+Operadores. 
+ 
+Como fluye el proceso el dia de pago de roles 
+CONFIGURACION INICIAL (una sola vez — Admin): 
+• Admin importa la nomina de 120 empleados desde el Excel de RRHH 
+• Crea 3 grupos: 'Ventas', 'Logistica', 'Administracion' 
+• Asigna Operador 1 a grupo Ventas y Logistica. Operador 2 a Administracion. 
+• Activa Modo Confianza para Operador 1 (lleva 1 ano sin errores). Operador 2 es 
+nuevo, sin Modo Confianza. 
+CADA MES — DIA DE PAGO (Operadores): 
+• Operador 1 sube los 80 PDFs de Ventas y Logistica. La app valida el mapeo. Todo 
+OK. Click en enviar. Los 80 correos salen en 45 segundos. Supervisor recibe 
+resumen por email. 
+• Operador 2 sube los 40 PDFs de Administracion. Crea el envio. Va a cola de 
+aprobacion del Supervisor. 
+• Supervisor revisa el mapeo del Operador 2 en 2 minutos, aprueba. Los 40 correos 
+salen. 
+Tiempo total del proceso: 10 minutos en lugar de 3 horas. Cero errores de PDF equivocado. Log 
+completo descargable para auditoria interna. 
+ 
+7. Prompts para Antigravity 
+5 prompts en orden. Cada uno construye sobre el anterior. Disenados para contexto RRHH + empresa 
+mediana ecuatoriana. 
+ 
+PROMPT 1 — Arquitectura del proyecto (contexto RRHH) 
+Soy co-fundador de Nexo Data Consulting, empresa de automatizacion en Guayaquil, 
+Ecuador. Construyo la Demo #7: app web de envio masivo de reportes PDF a empleados. 
+ 
+--- CLIENTE OBJETIVO --- 
+Empresa mediana ecuatoriana de 50-500 empleados con departamento de RRHH. 
+Caso de uso principal: envio mensual de roles de pago, comprobantes de beneficios 
+y comunicados personalizados a empleados. 
+ 
+--- STACK TECNICO --- 
+Frontend: React + Tailwind CSS 
+Backend: FastAPI (Python 3.10+) 
+Base de datos: PostgreSQL 
+Auth: JWT + bcrypt 
+OAuth2: google-auth-oauthlib (Gmail), msal (Outlook) 
+Motor de envio: smtplib + email.mime 
+Hosting MVP: Railway o Render (~$15/mes) 
+ 
+--- FUNCIONALIDADES CORE --- 
+1. 3 roles: Admin, Supervisor, Operador 
+2. Modo Confianza: el Supervisor puede marcar Operadores para que envien sin 
+aprobacion 
+3. Gestion de empleados: importar CSV + CRUD manual 
+4. Grupos de empleados asignables a Operadores 
+5. Mapeo automatico PDF-empleado via cedula en nombre de archivo 
+6. Validacion previa al envio (ningún PDF sin match antes de ejecutar) 
+7. Log completo descargable 
+8. Resumen automatico al Supervisor despues de cada envio 
+ 
+ENTREGABLE: Estructura de carpetas del monorepo /frontend y /backend. 
+Solo arquitectura, sin codigo aun. 
+ 
+PROMPT 2 — Modelos de base de datos para RRHH 
+Con la arquitectura definida, genera los modelos SQLAlchemy para PostgreSQL: 
+ 
+// USUARIOS DEL SISTEMA 
+User: id, email, nombre, hashed_password, 
+      rol ENUM('admin','supervisor','operador'), 
+      activo BOOL, created_at 
+ 
+// EMPLEADOS DE LA EMPRESA (los destinatarios de los correos) 
+Empleado: id, cedula (unique), nombre, apellido, email, 
+          departamento, cargo, estado ENUM('activo','inactivo','prueba'), 
+          grupo_id FK, created_at 
+ 
+// GRUPOS DE EMPLEADOS 
+Grupo: id, nombre, descripcion, created_by FK User 
+ 
+// ASIGNACION OPERADOR -> GRUPOS (un operador puede tener varios grupos) 
+OperadorGrupo: id, user_id FK, grupo_id FK 
+ 
+// MODO CONFIANZA POR OPERADOR 
+ConfianzaConfig: id, operador_user_id FK, activado_por FK User, 
+                 activo BOOL, activado_en, desactivado_en // Nota: ConfianzaGlobal es un campo booleano en la tabla de configuracion global 
+ 
+// OAUTH TOKENS 
+OAuthToken: id, user_id FK, proveedor ENUM('gmail','outlook'), 
+            access_token_enc TEXT, refresh_token_enc TEXT, expires_at 
+ 
+// ENVIOS 
+Envio: id, nombre, creado_por FK User, aprobado_por FK User nullable, 
+       grupo_id FK, plantilla_id FK, estado ENUM( 
+       
+'borrador','pendiente_aprobacion','aprobado','enviando','completado','fallido'), 
+       modo_confianza_usado BOOL, 
+       programado_para TIMESTAMP nullable, ejecutado_en TIMESTAMP nullable, 
+       total INT, enviados_ok INT, enviados_fallo INT 
+ 
+// LOG POR DESTINATARIO 
+LogEnvio: id, envio_id FK, empleado_id FK, pdf_filename, 
+          estado ENUM('ok','fallo'), error_message, enviado_en 
+ 
+Genera los modelos completos con relaciones, indices y constraints. 
+ 
+PROMPT 3 — Logica del Modo Confianza 
+Genera el modulo de logica de negocio para el Modo Confianza en FastAPI: 
+ 
+FUNCION: check_modo_confianza(operador_id: int, db: Session) -> bool 
+  Retorna True si: 
+  - El campo ConfianzaGlobal en la tabla Config es True, O 
+  - Existe un registro ConfianzaConfig para ese operador con activo=True 
+  Retorna False en cualquier otro caso. 
+ 
+ENDPOINT: POST /envios/{envio_id}/ejecutar 
+  1. Verifica que el usuario es el creador del envio o un Supervisor/Admin 
+  2. Si el usuario es Operador: llama check_modo_confianza() 
+     - Si True: ejecuta directamente, cambia estado a 'enviando' 
+     - Si False: cambia estado a 'pendiente_aprobacion', notifica al Supervisor 
+  3. Si el usuario es Supervisor o Admin: ejecuta directamente siempre 
+ 
+ENDPOINT: PATCH /usuarios/{user_id}/modo-confianza 
+  Solo accesible por Admin y Supervisor 
+  Body: { activo: bool } 
+  Crea o actualiza registro en ConfianzaConfig 
+  Registra en log de auditoria: quien cambio, para quien, cuando, nuevo estado 
+ 
+ENDPOINT: PATCH /config/modo-confianza-global 
+  Solo accesible por Admin 
+  Body: { activo: bool } 
+  Actualiza flag global en tabla Config 
+ 
+POST-ENVIO CON MODO CONFIANZA: 
+  Cuando un envio de Modo Confianza termina, el sistema envia automaticamente 
+  un email de resumen al Supervisor con: nombre del Operador, grupo enviado, 
+  total enviados, total fallidos, y link al log.  
+PROMPT 4 — Validacion de mapeo PDF-empleado 
+Genera el modulo de validacion previa al envio (endpoint POST 
+/envios/{id}/validar): 
+ 
+LOGICA DE MAPEO AUTOMATICO: 
+El sistema busca la cedula de cada empleado del grupo seleccionado 
+dentro del nombre de cada archivo PDF subido. 
+Ejemplo: archivo '0912345678_rol_noviembre.pdf' matchea con empleado cedula 
+0912345678 
+ 
+FUNCION: validate_pdf_mapping(envio_id, archivos_subidos, grupo_id, db) 
+  Retorna un objeto con: 
+  - matches: lista de {empleado_nombre, cedula, pdf_filename, status: 'ok'} 
+  - sin_pdf: lista de empleados del grupo sin PDF asignado 
+  - sin_empleado: lista de PDFs que no matchearon con ningun empleado 
+  - puede_ejecutar: bool (True solo si sin_pdf y sin_empleado estan vacios) 
+ 
+REGLA CRITICA: el envio no puede ejecutarse si puede_ejecutar es False. 
+El frontend debe mostrar la validacion antes del boton de enviar. 
+ 
+ENDPOINT: GET /envios/{id}/preview-mapeo 
+  Retorna la visualizacion del mapeo actual para que el usuario confirme 
+  antes de ejecutar. Formato: tabla con columnas [Empleado, Cedula, PDF asignado, 
+Estado] 
+ 
+Incluir tambien validacion de emails: si algun empleado tiene email invalido 
+o en blanco, marcarlo como advertencia (no bloquea el envio, solo advierte). 
+ 
+PROMPT 5 — Pantalla NuevoEnvio.jsx con flujo RRHH 
+Genera el componente React NuevoEnvio.jsx para el flujo especifico de RRHH: 
+ 
+FLUJO EN 4 PASOS (wizard con barra de progreso): 
+ 
+PASO 1 - Seleccionar grupo: 
+  Dropdown con los grupos asignados al usuario actual (del JWT). 
+  Muestra el numero de empleados activos en cada grupo. 
+  Si el usuario es Admin o Supervisor: ve todos los grupos. 
+ 
+PASO 2 - Subir PDFs: 
+  Zona drag-and-drop grande con mensaje: 'Nombra los PDFs con la cedula del 
+empleado' 
+  Ejemplo visible: '0912345678_rol_noviembre.pdf' 
+  Al soltar los archivos, llama GET /envios/preview-mapeo y muestra la tabla de 
+resultado: 
+  - Verde: PDF correctamente mapeado al empleado 
+  - Rojo: PDF sin match O empleado sin PDF 
+  El boton Siguiente esta deshabilitado si hay items en rojo. 
+ 
+PASO 3 - Configurar email: 
+  Dropdown de plantilla de email corporativa.   Campo de asunto editable con variables: '[nombre]', '[mes]', '[empresa]'. 
+  Preview del email que va a recibir cada empleado. 
+ 
+PASO 4 - Confirmar y enviar: 
+  Resumen: grupo, numero de empleados, plantilla, asunto. 
+  Si el usuario es Operador SIN Modo Confianza: 
+    Boton: 'Enviar para aprobacion' (azul) 
+    Texto explicativo: 'Tu Supervisor revisara este envio antes de que salga.' 
+  Si el usuario es Operador CON Modo Confianza, Supervisor o Admin: 
+    Boton: 'Ejecutar envio ahora' (verde) 
+  Barra de progreso en tiempo real durante el envio. 
+ 
+Usar Tailwind CSS. Diseno profesional corporativo. Colores: #1A3C6E y #2563EB. 
+ 
+8. Precio Actualizado para Version RRHH 
+Implementacion basica 
+(1 empresa) 
+$1,400 – $2,000 + $150/mes mantenimiento 
+ 
+Combo con Demo #3 
+(generacion + envio) 
+$2,200 – $3,500 total 
+ 
+Version SaaS multi-
+empresa 
+$3,000 – $5,000 setup + $400-600/mes 
+ 
+Argumento de precio al 
+cliente 
+Si pagan $8/hora al asistente que hace esto manualmente y tarda 3 
+horas al mes, son $24/mes. El sistema cuesta $150/mes y les libera 
+tiempo para trabajo de mayor valor. 
+ 
+NEXO DATA CONSULTING 
+Guayaquil, Ecuador  |  2026 
+Documento interno — Equipo fundador 
+ 
