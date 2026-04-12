@@ -155,7 +155,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 with tab1:
     if not df_conc.empty:
         st.dataframe(
-            df_conc.style.applymap(
+            df_conc.style.map(
                 lambda _: "background-color: #d5f5e3",
                 subset=["estado"],
             ),
@@ -168,7 +168,7 @@ with tab1:
 with tab2:
     if not df_fb.empty:
         st.dataframe(
-            df_fb.style.applymap(
+            df_fb.style.map(
                 lambda _: "background-color: #fdebd0",
                 subset=["estado"],
             ),
@@ -181,7 +181,7 @@ with tab2:
 with tab3:
     if not df_fc.empty:
         st.dataframe(
-            df_fc.style.applymap(
+            df_fc.style.map(
                 lambda _: "background-color: #fadbd8",
                 subset=["estado"],
             ),
