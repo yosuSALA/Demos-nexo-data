@@ -49,7 +49,7 @@ pip install -r requirements.txt
 ### Opcion 1: Interfaz web (recomendado)
 
 ```bash
-streamlit run app.py
+python -m streamlit run app.py
 ```
 
 La interfaz permite generar datos de prueba, visualizar clientes y enviar reportes desde el navegador.

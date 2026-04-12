@@ -100,3 +100,6 @@ El generador crea datos realistas:
 - ~76% de registros coinciden entre ambas fuentes (con desfase de 1-3 días)
 - ~12% solo aparecen en banco (comisiones, cargos automáticos)
 - ~12% solo aparecen en contabilidad (cheques en tránsito, ajustes)
+
+
+# Cosas a agregar
