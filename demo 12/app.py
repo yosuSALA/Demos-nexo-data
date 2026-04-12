@@ -199,7 +199,7 @@ with col_tabla:
     resumen_display["Saldo Total"] = resumen_display["Saldo Total"].map("${:,.2f}".format)
     resumen_display["% del Saldo"] = resumen_display["% del Saldo"].map("{:.1f}%".format)
     st.dataframe(
-        resumen_display.style.applymap(colorear_bucket, subset=["Categoria"]),
+        resumen_display.style.map(colorear_bucket, subset=["Categoria"]),
         use_container_width=True,
         hide_index=True,
     )
@@ -381,7 +381,7 @@ df_show["monto_total"] = df_show["monto_total"].map("${:,.2f}".format)
 df_show["saldo_pendiente"] = df_show["saldo_pendiente"].map("${:,.2f}".format)
 
 st.dataframe(
-    df_show.style.applymap(colorear_bucket, subset=["aging_bucket"]),
+    df_show.style.map(colorear_bucket, subset=["aging_bucket"]),
     use_container_width=True,
     hide_index=True,
     height=500,
