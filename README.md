@@ -60,34 +60,36 @@ Catálogo de demos técnicas y productos automatizados de Nexo Data Consulting p
 
 ## 📋 Asignación de Tareas y Pendientes (Roadmap 2026)
 
-Este listado detalla las responsabilidades inmediatas para completar el catálogo de Nexo Data. Se debe priorizar la estética **Premium / Dark Mode** discutida hoy.
+Este listado detalla las responsabilidades inmediatas. **Meta Semana 3:** Eliminar todos los estados en "Rojo". Se debe aplicar la estética **Premium / Dark Mode** en todas las interfaces web.
 
-### 🎯 Josue & Danilo
-- **[URGENTE] Nexo Hub (Landing Page):** Finalizar el portal comercial integrando el catálogo (usar `prompt_landing_page_nexo.md` como base).
-- **Consolidación de Marca:** Asegurar que el tono "Fintech/Consultoría" se mantenga en todo el sitio.
-- **Demo #3:** Estandarizar el generador de reportes PDF para clientes B2B.
+### 🎯 Josue (Líder / Danilo)
+- **[URGENTE] Nexo Hub:** Liderar la implementación de la Landing Page principal.
+- **Demo #3 (Reportes PDF):** Estandarizar el motor de plantillas HTML y asegurar que el generador sea multi-empresa.
+- **Revisión General:** Auditoría estética de todas las demos antes de presentarlas a clientes C-Level.
 
-### 📊 Mathew
-- **Demo #2 (Dashboard Ejecutivo):** Construir desde cero la visualización de KPIs financieros premium (P&L, Burn Rate).
-- **Demo #5 (Venta en Tiempo Real):** Implementar la interfaz visual (Streamlit o React) con el nuevo diseño dark.
-- **Demo #12 (Cartera Vencida):** Ajustar colores y contrastes según los nuevos estándares de diseño.
+### 📊 Mathew (Atraso Crítico - Prioridad Máxima)
+- **Demo #2 (Dashboard Ejecutivo):** Crear estructura base en `demo2/app.py`. Debe incluir P&L, Burn Rate y EBITDA (Look Premium).
+- **Demo #5 (Ventas):** Finalizar la UI en Streamlit. Los datos ya existen, falta la visualización de alto impacto.
+- **Tarea de Revisión:** Auditar la **Demo #12** y actualizar su CSS para que coincida con el nuevo diseño Dark Mode de la Demo 8.
 
 ### 🛠️ [CHACHA]
-- **Demo #13 (Scraper de Precios):** **[PENDIENTE CORRECCIÓN]** Revisar lógica de scraping y arreglar problemas de visualización en las tablas de comparación.
-- **Demo #1 (Bot SRI):** Finalizar el flujo de descarga automática y cruce de facturas electrónicas.
-- **Demo #6 (ATS):** Verificar validaciones de RUC frente a las últimas reglas del SRI.
+- **Demo #13 (Scraper):** Corregir errores de lógica en la extracción y mejorar el contraste de la tabla comparativa.
+- **Demo #1 (Bot SRI):** Modularizar el código para permitir descargas masivas por rango de fechas (con manejo automático de errores).
+- **Tarea de Revisión:** Testear la **Demo #6** (SRI/ATS) con datos reales y verificar que el XML generado sea válido en el validador del SRI.
 
 ### 👤 Andrés
-- **Demo #14 (Evaluación 360°):** Completar el flujo de encuestas y visualización de resultados por empleado.
-- **Demo #9 (Portal RRHH):** Mejorar la UI del dashboard de asistencia y geolocalización.
+- **Demo #14 (Evaluación 360°):** Finalizar el módulo de "Resultados Individuales" y la vista de "Radar Chart" para las competencias.
+- **Demo #9 (Portal RRHH):** Optimizar la carga del mapa de geolocalización y corregir el responsivo en móviles.
+- **Tarea de Revisión:** Revisar todos los `README.md` de las demos técnicas (1, 4, 6, 13) y simplificar el lenguaje para que sea entendible por un gerente no-técnico.
 
 ### 🐳 Nexo Team (Infraestructura)
-- **Dockerización Total:** Crear `Dockerfile` para cada carpeta de demo para despliegue en servidor.
-- **Tailscale Setup:** Asegurar que todas las nuevas demos sean accesibles vía la IP `100.101.185.36`.
+- **Dockerización:** Cada miembro debe crear su `Dockerfile` siguiendo el estándar del equipo.
+- **Tailscale:** Asegurar la disponibilidad 24/7 del servidor `100.101.185.36`.
 
 ---
 **Nexo Data Consulting**
 *Conectamos tus datos con decisiones inteligentes.*
 Guayaquil, Ecuador · 2026
+
 
 
