@@ -16,8 +16,11 @@ Catálogo de demos técnicas y productos automatizados de Nexo Data Consulting p
 | 4 | Bot de conciliación bancaria | [http://100.101.185.36:8504](http://100.101.185.36:8504) |
 | 8 | Monitor de vencimiento de contratos | [http://100.101.185.36:8508](http://100.101.185.36:8508) |
 | 9 | Portal de asistencia de empleados (RRHH) | [http://100.101.185.36:3000](http://100.101.185.36:3000) |
+| 10 | Cotizador inteligente con IA | [http://100.101.185.36:8505](http://100.101.185.36:8505) |
 | 12 | Dashboard de cartera vencida | [http://100.101.185.36:8502](http://100.101.185.36:8502) |
 | 13 | Scraper de precios de competencia | [http://100.101.185.36:8503](http://100.101.185.36:8503) |
+| 14 | App de evaluación de desempeño 360° | [http://100.101.185.36:3001](http://100.101.185.36:3001) |
+| 15 | Chatbot de consultas internas con IA | [http://100.101.185.36:8506](http://100.101.185.36:8506) |
 
 ---
 
