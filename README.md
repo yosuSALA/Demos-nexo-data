@@ -6,6 +6,21 @@ Catálogo de demos técnicas y productos automatizados de Nexo Data Consulting p
 >
 > **Nota:** Todos los avances y la consolidación técnica del catálogo realizados este día fueron iniciados y liderados por **Josue** con el apoyo de **Antigravity**.
 
+## 🌐 Demos en Vivo (Acceso Tailscale)
+
+> Conéctate a la red Tailscale de Nexo Data para acceder a las apps en tiempo real.
+> IP del servidor: `100.101.185.36`
+
+| # | Demo | Enlace |
+|---|------|--------|
+| 4 | Bot de conciliación bancaria | [http://100.101.185.36:8504](http://100.101.185.36:8504) |
+| 8 | Monitor de vencimiento de contratos | [http://100.101.185.36:8508](http://100.101.185.36:8508) |
+| 9 | Portal de asistencia de empleados (RRHH) | [http://100.101.185.36:3000](http://100.101.185.36:3000) |
+| 12 | Dashboard de cartera vencida | [http://100.101.185.36:8502](http://100.101.185.36:8502) |
+| 13 | Scraper de precios de competencia | [http://100.101.185.36:8503](http://100.101.185.36:8503) |
+
+---
+
 ## 🚀 Estado del Portafolio de Demos
 
 | # | Demo / Producto | Estado | Responsable |
