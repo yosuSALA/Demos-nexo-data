@@ -63,15 +63,23 @@ Al utilizar este archivo para generar la Landing Page en el nuevo repositorio, a
 
 ## 5. Actualizaciones del Día (13 de Abril) - Agregado Hoy
 
-Para la versión más reciente de la Landing Page, integra los siguientes conceptos estratégicos desarrollados hoy:
+Para la versión definitiva de la Landing Page, integra los siguientes elementos clave desarrollados hoy:
 
-### A. El "Nexo Hub" (Ecosistema Conectado)
-La web no solo debe ser informativa, sino servir como un **punto de acceso unificado**. Menciona que todas nuestras soluciones están "Dockerizadas" para una implementación instantánea y segura en la nube o servidores locales del cliente.
+### A. Estética "Executive Premium"
+La web principal debe dictar el estándar visual para todas las demos:
+*   **Tema:** Dark Mode profundo con gradientes radiales (`slate-900` a `slate-950`).
+*   **Componentes:** Uso de **Glassmorphism** (tarjetas traslúcidas con desenfoque de fondo y bordes de 1px con brillo sutil).
+*   **Tipografía:** Combinación de **Outfit** para encabezados de alto impacto e **Inter** para cuerpo de texto y métricas de precisión.
 
-### B. Nuevos Pendientes Estratégicos (A resaltar como "Próximamente")
-*   **Predictive Sales & Demand Forecasting:** Expansión hacia la analítica proactiva mediante Machine Learning para anticipar el mercado.
-*   **Dashboard Ejecutivo 360°:** Visualización de alto nivel diseñada específicamente para la toma de decisiones relámpago de la junta directiva.
+### B. El "Nexo Hub" (Showcase Interactivo)
+Menciona explícitamente que el catálogo es accesible en tiempo real a través de nuestra red privada corporativa (**Tailscale**). Esto demuestra robustez técnica en la gestión de accesos y despliegue seguro en la nube.
 
-### C. Enfoque en la Robustez
-Resaltar que cada microservicio incluye validaciones de datos rigorosas y manejo de excepciones, garantizando la continuidad de los flujos financieros sin intervención manual.
+### C. Roadmap Estratégico 2026 (Visión de Futuro)
+Resaltar que Nexo Data no solo automatiza el pasado, sino que predice el futuro mediante:
+*   **Predictive Sales & Demand Forecasting:** Introducción de modelos de ML para pasar de la analítica reactiva a la proactiva.
+*   **Dashboard Ejecutivo 360°:** Visualización de alto nivel para decisiones estratégicas inmediatas.
+
+### D. Enfoque en la Robustez y Cumplimiento
+Subrayar que todas nuestras automatizaciones (SRI, ATS, Conciliación) incluyen validaciones rigurosas y manejo de excepciones, garantizando la continuidad operativa sin intervención manual.
+
 
