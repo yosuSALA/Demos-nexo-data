@@ -26,17 +26,52 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Estilos globales ──────────────────────────────────────────
+# ── Estilos globales Premium ──────────────────────────────────
 st.markdown("""
 <style>
-  [data-testid="stMetricValue"] { font-size: 2rem !important; font-weight: 700; }
-  .badge-rojo     { background:#e74c3c; color:#fff; padding:3px 10px;
-                    border-radius:4px; font-weight:bold; }
-  .badge-amarillo { background:#f39c12; color:#fff; padding:3px 10px;
-                    border-radius:4px; font-weight:bold; }
-  .badge-verde    { background:#27ae60; color:#fff; padding:3px 10px;
-                    border-radius:4px; font-weight:bold; }
-  div[data-testid="stSidebarContent"] { background: #1a1a2e; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Outfit:wght@300;600&display=swap');
+
+    /* Fondo principal dark premium */
+    .stApp {
+        background: radial-gradient(circle at top right, #1e293b, #0f172a);
+        color: #f8fafc;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    /* Sidebar minimalista */
+    [data-testid="stSidebar"] {
+        background-color: rgba(15, 23, 42, 0.95);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Glassmorphism Cards */
+    div[data-testid="stMetricValue"] {
+        color: #38bdf8 !important;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .stMetric {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    /* Títulos y Headers */
+    h1, h2, h3 {
+        color: #f1f5f9;
+        font-weight: 600 !important;
+        letter-spacing: -0.02em;
+    }
+
+    /* Badges refinados */
+    .badge-rojo     { background: rgba(231, 76, 60, 0.2); color: #ff7675; padding: 4px 12px; border-radius: 20px; border: 1px solid #e74c3c; font-weight: bold; font-size: 0.8rem; }
+    .badge-amarillo { background: rgba(243, 156, 18, 0.2); color: #ffeaa7; padding: 4px 12px; border-radius: 20px; border: 1px solid #f39c12; font-weight: bold; font-size: 0.8rem; }
+    .badge-verde    { background: rgba(39, 174, 96, 0.2); color: #55efc4; padding: 4px 12px; border-radius: 20px; border: 1px solid #27ae60; font-weight: bold; font-size: 0.8rem; }
+
+    /* Divider suave */
+    hr { border-color: rgba(255, 255, 255, 0.1) !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -61,7 +96,8 @@ def cargar_datos(regenerar: bool = False) -> pd.DataFrame:
     return df
 
 
-COLORES = {"Rojo": "#e74c3c", "Amarillo": "#f39c12", "Verde": "#27ae60"}
+COLORES_NEON = {"Rojo": "#ff4d4d", "Amarillo": "#ffcc00", "Verde": "#00ffcc"}
+COLORES = COLORES_NEON
 
 
 # ── Sidebar ───────────────────────────────────────────────────
@@ -154,10 +190,17 @@ with col_pie:
         conteos, names="Estado", values="Cantidad",
         color="Estado",
         color_discrete_map=COLORES,
-        hole=0.45,
+        hole=0.6,
+        template="plotly_dark"
     )
-    fig_pie.update_traces(textinfo="percent+value", textfont_size=13)
-    fig_pie.update_layout(showlegend=True, margin=dict(t=10, b=10))
+    fig_pie.update_traces(textinfo="percent", textfont_size=12, marker=dict(line=dict(color='#0f172a', width=2)))
+    fig_pie.update_layout(
+        showlegend=True, 
+        margin=dict(t=30, b=0, l=0, r=0), 
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)',
+        legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)
+    )
     st.plotly_chart(fig_pie, use_container_width=True)
 
 with col_bar:
@@ -170,10 +213,14 @@ with col_bar:
         tipo_estado, x="count", y="tipo", color="estado_semaforo",
         color_discrete_map=COLORES, orientation="h",
         labels={"count": "Cantidad", "tipo": "", "estado_semaforo": "Estado"},
+        template="plotly_dark"
     )
     fig_bar.update_layout(
         legend_title_text="", margin=dict(t=10, b=10),
-        yaxis=dict(tickfont=dict(size=11)),
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)',
+        yaxis=dict(tickfont=dict(size=11, color="#94a3b8")),
+        xaxis=dict(gridcolor="rgba(255,255,255,0.05)")
     )
     st.plotly_chart(fig_bar, use_container_width=True)
 
@@ -187,10 +234,15 @@ with col_timeline:
         agrup, x="mes", y="n", color="estado_semaforo",
         color_discrete_map=COLORES,
         labels={"mes": "Mes", "n": "Obligaciones", "estado_semaforo": "Estado"},
+        template="plotly_dark"
     )
     fig_tl.update_layout(
         legend_title_text="", margin=dict(t=10, b=10),
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)',
         xaxis_tickangle=-30,
+        xaxis=dict(gridcolor="rgba(255,255,255,0.05)"),
+        yaxis=dict(gridcolor="rgba(255,255,255,0.05)")
     )
     st.plotly_chart(fig_tl, use_container_width=True)
 
@@ -202,27 +254,28 @@ col_g1, col_g2 = st.columns([1, 3])
 
 with col_g1:
     fig_gauge = go.Figure(go.Indicator(
-        mode="gauge+number+delta",
+        mode="gauge+number",
         value=pct_critico,
-        number={"suffix": "%", "font": {"size": 36}},
-        delta={"reference": 20, "increasing": {"color": "#e74c3c"},
-               "decreasing": {"color": "#27ae60"}},
+        number={"suffix": "%", "font": {"size": 40, "family": "Inter", "color": "#f1f5f9"}},
         gauge={
-            "axis": {"range": [0, 100]},
-            "bar":  {"color": COLORES["Rojo"] if pct_critico > 20 else COLORES["Verde"]},
+            "axis": {"range": [0, 100], "tickwidth": 1, "tickcolor": "#94a3b8"},
+            "bar":  {"color": "#38bdf8"},
+            "bgcolor": "rgba(255,255,255,0.05)",
+            "borderwidth": 2,
+            "bordercolor": "rgba(255,255,255,0.1)",
             "steps": [
-                {"range": [0, 20],   "color": "#d5f5e3"},
-                {"range": [20, 40],  "color": "#fef9e7"},
-                {"range": [40, 100], "color": "#fdecea"},
+                {"range": [0, 20],   "color": "rgba(39, 174, 96, 0.1)"},
+                {"range": [20, 40],  "color": "rgba(243, 156, 18, 0.1)"},
+                {"range": [40, 100], "color": "rgba(231, 76, 60, 0.1)"},
             ],
-            "threshold": {
-                "line": {"color": "red", "width": 3},
-                "thickness": 0.8, "value": 20,
-            },
         },
-        title={"text": "% Obligaciones Criticas"},
     ))
-    fig_gauge.update_layout(height=250, margin=dict(t=30, b=10, l=20, r=20))
+    fig_gauge.update_layout(
+        height=280, 
+        margin=dict(t=50, b=20, l=30, r=30),
+        paper_bgcolor='rgba(0,0,0,0)', 
+        font={'color': "#f1f5f9", 'family': "Outfit"}
+    )
     st.plotly_chart(fig_gauge, use_container_width=True)
 
 with col_g2:
