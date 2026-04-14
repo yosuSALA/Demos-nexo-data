@@ -18,8 +18,9 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import Chroma
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
 
 # ── Rutas por defecto ────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent
@@ -172,7 +173,7 @@ def build_qa_chain(
     vectorstore_path: str | Path = CHROMA_DIR,
     model_name: str = "gpt-3.5-turbo",
     k: int = 4,
-) -> RetrievalQA:
+) -> dict:
     """Construye la cadena de QA sobre el vectorstore existente."""
 
     vectorstore_path = Path(vectorstore_path)
@@ -183,32 +184,35 @@ def build_qa_chain(
     )
 
     llm = ChatOpenAI(model=model_name, temperature=0)
+    retriever = vectorstore.as_retriever(search_kwargs={"k": k})
 
-    chain = RetrievalQA.from_chain_type(
-        llm=llm,
-        chain_type="stuff",
-        retriever=vectorstore.as_retriever(search_kwargs={"k": k}),
-        return_source_documents=True,
-        chain_type_kwargs={"prompt": QA_PROMPT},
+    def _format_docs(docs):
+        return "\n\n".join(doc.page_content for doc in docs)
+
+    chain = (
+        {"context": retriever | _format_docs, "question": RunnablePassthrough()}
+        | QA_PROMPT
+        | llm
+        | StrOutputParser()
     )
-    return chain
+    return {"chain": chain, "retriever": retriever}
 
 
-def ask(question: str, chain: RetrievalQA | None = None) -> dict:
+def ask(question: str, chain: dict | None = None) -> dict:
     """Hace una pregunta y devuelve {'answer': str, 'sources': list[str]}."""
 
     if chain is None:
         chain = build_qa_chain()
 
-    result = chain.invoke({"query": question})
+    docs = chain["retriever"].invoke(question)
+    answer = chain["chain"].invoke(question)
 
     sources = sorted(
-        {Path(doc.metadata.get("source", "desconocido")).name
-         for doc in result.get("source_documents", [])}
+        {Path(doc.metadata.get("source", "desconocido")).name for doc in docs}
     )
 
     return {
-        "answer": result["result"],
+        "answer": answer,
         "sources": sources,
     }
 
@@ -217,7 +221,7 @@ def ask(question: str, chain: RetrievalQA | None = None) -> dict:
 # 4. Punto de entrada — demo interactiva
 # =============================================================================
 
-def setup() -> RetrievalQA:
+def setup() -> dict:
     """Crea los PDFs de prueba, ingesta y devuelve la cadena QA lista."""
     create_sample_pdfs()
     ingest_documents()
