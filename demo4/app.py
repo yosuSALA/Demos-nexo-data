@@ -156,7 +156,7 @@ with tab1:
     if not df_conc.empty:
         st.dataframe(
             df_conc.style.map(
-                lambda _: "background-color: #d5f5e3",
+                lambda _: "background-color: #27ae60; color: white; font-weight: bold;",
                 subset=["estado"],
             ),
             use_container_width=True,
@@ -169,7 +169,7 @@ with tab2:
     if not df_fb.empty:
         st.dataframe(
             df_fb.style.map(
-                lambda _: "background-color: #fdebd0",
+                lambda _: "background-color: #d35400; color: white; font-weight: bold;",
                 subset=["estado"],
             ),
             use_container_width=True,
@@ -182,7 +182,7 @@ with tab3:
     if not df_fc.empty:
         st.dataframe(
             df_fc.style.map(
-                lambda _: "background-color: #fadbd8",
+                lambda _: "background-color: #c0392b; color: white; font-weight: bold;",
                 subset=["estado"],
             ),
             use_container_width=True,
