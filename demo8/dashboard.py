@@ -275,9 +275,9 @@ df_display = df_display.rename(columns={
 # Color de fondo por estado
 def _colorear_fila(row):
     colores_bg = {
-        "Rojo":     "background-color: #fdecea",
-        "Amarillo": "background-color: #fef9e7",
-        "Verde":    "background-color: #eafaf1",
+        "Rojo":     "background-color: #c0392b; color: white;",
+        "Amarillo": "background-color: #d35400; color: white;",
+        "Verde":    "background-color: #27ae60; color: white;",
     }
     bg = colores_bg.get(row["Estado"], "")
     return [bg] * len(row)

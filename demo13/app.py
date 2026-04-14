@@ -219,10 +219,11 @@ if ejecutar or ("df_comparacion" in st.session_state):
         """Aplica color segun el signo de la diferencia."""
         if isinstance(val, (int, float)):
             if val > 0:
-                return "background-color: #ffcccc; color: #cc0000"  # rojo — somos mas caros
+                return "background-color: #c0392b; color: white; font-weight: bold;"  # rojo oscuro — somos mas caros
             elif val < 0:
-                return "background-color: #ccffcc; color: #006600"  # verde — somos mas baratos
+                return "background-color: #27ae60; color: white; font-weight: bold;"  # verde oscuro — somos mas baratos
         return ""
+
 
     columnas_color = ["Dif. Absoluta ($)", "Dif. Porcentual (%)"]
     styled = df_display.style.map(
