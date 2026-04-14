@@ -1,0 +1,94 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+  <h1>Rol de Pagos - <%= rol.periodo %></h1>
+  <a href="/reportes/pdf/rol/<%= rol.id %>" class="btn btn-secondary" target="_blank">Descargar PDF</a>
+</div>
+
+<div class="panel">
+  <h3>Datos del Empleado</h3>
+  <p><strong><%= rol.apellidos %> <%= rol.nombres %></strong> | Cédula: <%= rol.cedula %> | Cargo: <%= rol.cargo %> | Dpto: <%= rol.departamento || 'N/A' %></p>
+  <p>Fecha Ingreso: <%= rol.fecha_ingreso %> | Banco: <%= rol.banco || 'N/A' %> - <%= rol.cuenta_bancaria || 'N/A' %></p>
+</div>
+
+<div class="grid-2">
+  <div class="panel">
+    <h3>Ingresos</h3>
+    <table class="detail-table">
+      <tr><td>Sueldo Base</td><td class="text-right"><%= formatMoney(rol.sueldo_base) %></td></tr>
+      <tr><td>Horas Suplementarias (50%)</td><td class="text-right"><%= formatMoney(rol.horas_suplementarias_valor) %></td></tr>
+      <tr><td>Horas Extraordinarias (100%)</td><td class="text-right"><%= formatMoney(rol.horas_extraordinarias_valor) %></td></tr>
+      <tr><td>Comisiones</td><td class="text-right"><%= formatMoney(rol.comisiones) %></td></tr>
+      <tr><td>Bonos</td><td class="text-right"><%= formatMoney(rol.bonos) %></td></tr>
+      <tr><td>Otros Ingresos</td><td class="text-right"><%= formatMoney(rol.otros_ingresos) %></td></tr>
+      <tr class="total-row"><td><strong>TOTAL INGRESOS</strong></td><td class="text-right"><strong><%= formatMoney(rol.total_ingresos) %></strong></td></tr>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3>Deducciones</h3>
+    <table class="detail-table">
+      <tr><td>Aporte IESS (9.45%)</td><td class="text-right"><%= formatMoney(rol.aporte_iess) %></td></tr>
+      <tr><td>Préstamo Quirografario</td><td class="text-right"><%= formatMoney(rol.prestamo_quirografario) %></td></tr>
+      <tr><td>Préstamo Hipotecario</td><td class="text-right"><%= formatMoney(rol.prestamo_hipotecario) %></td></tr>
+      <tr><td>Anticipo Sueldo</td><td class="text-right"><%= formatMoney(rol.anticipo_sueldo) %></td></tr>
+      <tr><td>Pensión Alimenticia</td><td class="text-right"><%= formatMoney(rol.pension_alimenticia) %></td></tr>
+      <tr><td>Retención IR</td><td class="text-right"><%= formatMoney(rol.retencion_ir) %></td></tr>
+      <tr><td>Multas/Atrasos</td><td class="text-right"><%= formatMoney(rol.multas) %></td></tr>
+      <tr><td>Otras Deducciones</td><td class="text-right"><%= formatMoney(rol.otras_deducciones) %></td></tr>
+      <tr class="total-row"><td><strong>TOTAL DEDUCCIONES</strong></td><td class="text-right"><strong><%= formatMoney(rol.total_deducciones) %></strong></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="panel neto-panel">
+  <h2 class="text-center">LÍQUIDO A RECIBIR: <%= formatMoney(rol.neto_a_recibir) %></h2>
+</div>
+
+<div class="panel">
+  <h3>Provisiones (Costo Empresa)</h3>
+  <table class="detail-table">
+    <tr><td>Aporte Patronal IESS (11.15%)</td><td class="text-right"><%= formatMoney(rol.aporte_patronal) %></td></tr>
+    <tr><td>Décimo Tercer Sueldo (prov.)</td><td class="text-right"><%= formatMoney(rol.decimo_tercero_prov) %></td></tr>
+    <tr><td>Décimo Cuarto Sueldo (prov.)</td><td class="text-right"><%= formatMoney(rol.decimo_cuarto_prov) %></td></tr>
+    <tr><td>Fondos de Reserva</td><td class="text-right"><%= formatMoney(rol.fondos_reserva_prov) %></td></tr>
+    <tr><td>Vacaciones (prov.)</td><td class="text-right"><%= formatMoney(rol.vacaciones_prov) %></td></tr>
+  </table>
+</div>
+
+<% if (rol.estado !== 'Aprobado') { %>
+<div class="panel">
+  <h3>Ajustar Valores Adicionales</h3>
+  <form method="POST" action="/nomina/rol/<%= rol.id %>/extras" class="form">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Comisiones</label>
+        <input type="number" name="comisiones" value="<%= rol.comisiones %>" step="0.01" class="input">
+      </div>
+      <div class="form-group">
+        <label>Bonos</label>
+        <input type="number" name="bonos" value="<%= rol.bonos %>" step="0.01" class="input">
+      </div>
+      <div class="form-group">
+        <label>Otros Ingresos</label>
+        <input type="number" name="otros_ingresos" value="<%= rol.otros_ingresos %>" step="0.01" class="input">
+      </div>
+      <div class="form-group">
+        <label>Anticipo Sueldo</label>
+        <input type="number" name="anticipo_sueldo" value="<%= rol.anticipo_sueldo %>" step="0.01" class="input">
+      </div>
+      <div class="form-group">
+        <label>Pensión Alimenticia</label>
+        <input type="number" name="pension_alimenticia" value="<%= rol.pension_alimenticia %>" step="0.01" class="input">
+      </div>
+      <div class="form-group">
+        <label>Otras Deducciones</label>
+        <input type="number" name="otras_deducciones" value="<%= rol.otras_deducciones %>" step="0.01" class="input">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar y Recalcular</button>
+  </form>
+</div>
+<% } %>
+
+<%- include('../partials/footer') %>

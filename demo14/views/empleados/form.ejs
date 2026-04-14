@@ -1,0 +1,102 @@
+<%- include('../partials/header') %>
+
+<h1><%= empleado && empleado.id ? 'Editar' : 'Nuevo' %> Empleado</h1>
+
+<% if (error) { %>
+  <div class="alert alert-danger"><%= error %></div>
+<% } %>
+
+<form method="POST" action="<%= empleado && empleado.id ? '/empleados/' + empleado.id : '/empleados' %>" class="form">
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Cédula de Identidad *</label>
+      <input type="text" name="cedula" value="<%= empleado ? empleado.cedula : '' %>" required maxlength="10" pattern="\d{10}" class="input">
+    </div>
+    <div class="form-group">
+      <label>Apellidos *</label>
+      <input type="text" name="apellidos" value="<%= empleado ? empleado.apellidos : '' %>" required class="input">
+    </div>
+    <div class="form-group">
+      <label>Nombres *</label>
+      <input type="text" name="nombres" value="<%= empleado ? empleado.nombres : '' %>" required class="input">
+    </div>
+    <div class="form-group">
+      <label>Fecha de Nacimiento</label>
+      <input type="date" name="fecha_nacimiento" value="<%= empleado ? empleado.fecha_nacimiento : '' %>" class="input">
+    </div>
+    <div class="form-group">
+      <label>Fecha de Ingreso *</label>
+      <input type="date" name="fecha_ingreso" value="<%= empleado ? empleado.fecha_ingreso : '' %>" required class="input">
+    </div>
+    <div class="form-group">
+      <label>Cargo *</label>
+      <input type="text" name="cargo" value="<%= empleado ? empleado.cargo : '' %>" required class="input">
+    </div>
+    <div class="form-group">
+      <label>Departamento</label>
+      <input type="text" name="departamento" value="<%= empleado ? empleado.departamento : '' %>" class="input">
+    </div>
+    <div class="form-group">
+      <label>Sueldo Base (USD) *</label>
+      <input type="number" name="sueldo_base" value="<%= empleado ? empleado.sueldo_base : '' %>" required step="0.01" min="0" class="input">
+    </div>
+    <div class="form-group">
+      <label>Tipo de Contrato *</label>
+      <select name="tipo_contrato" class="input" required>
+        <option value="Indefinido" <%= empleado && empleado.tipo_contrato === 'Indefinido' ? 'selected' : '' %>>Indefinido</option>
+        <option value="Plazo Fijo" <%= empleado && empleado.tipo_contrato === 'Plazo Fijo' ? 'selected' : '' %>>Plazo Fijo</option>
+        <option value="Eventual" <%= empleado && empleado.tipo_contrato === 'Eventual' ? 'selected' : '' %>>Eventual</option>
+        <option value="Pasantía" <%= empleado && empleado.tipo_contrato === 'Pasantía' ? 'selected' : '' %>>Pasantía</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Región *</label>
+      <select name="region" class="input" required>
+        <option value="Sierra/Amazonía" <%= empleado && empleado.region === 'Sierra/Amazonía' ? 'selected' : '' %>>Sierra / Amazonía</option>
+        <option value="Costa/Galápagos" <%= empleado && empleado.region === 'Costa/Galápagos' ? 'selected' : '' %>>Costa / Galápagos</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Cargas Familiares</label>
+      <input type="number" name="cargas_familiares" value="<%= empleado ? empleado.cargas_familiares : 0 %>" min="0" class="input">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" value="<%= empleado ? empleado.email : '' %>" class="input">
+    </div>
+    <div class="form-group">
+      <label>Teléfono</label>
+      <input type="text" name="telefono" value="<%= empleado ? empleado.telefono : '' %>" class="input">
+    </div>
+    <div class="form-group">
+      <label>Dirección</label>
+      <input type="text" name="direccion" value="<%= empleado ? empleado.direccion : '' %>" class="input">
+    </div>
+  </div>
+
+  <h3>Datos Bancarios</h3>
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Banco</label>
+      <input type="text" name="banco" value="<%= empleado ? empleado.banco : '' %>" class="input">
+    </div>
+    <div class="form-group">
+      <label>Número de Cuenta</label>
+      <input type="text" name="cuenta_bancaria" value="<%= empleado ? empleado.cuenta_bancaria : '' %>" class="input">
+    </div>
+    <div class="form-group">
+      <label>Tipo de Cuenta</label>
+      <select name="tipo_cuenta" class="input">
+        <option value="Ahorros" <%= empleado && empleado.tipo_cuenta === 'Ahorros' ? 'selected' : '' %>>Ahorros</option>
+        <option value="Corriente" <%= empleado && empleado.tipo_cuenta === 'Corriente' ? 'selected' : '' %>>Corriente</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="/empleados" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

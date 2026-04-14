@@ -1,0 +1,104 @@
+<%- include('../partials/header') %>
+
+<h1>Permisos y Vacaciones</h1>
+
+<div class="filter-bar">
+  <a href="/permisos?estado=Pendiente" class="btn btn-sm <%= estado === 'Pendiente' ? 'btn-primary' : 'btn-secondary' %>">Pendientes</a>
+  <a href="/permisos?estado=Aprobado" class="btn btn-sm <%= estado === 'Aprobado' ? 'btn-primary' : 'btn-secondary' %>">Aprobados</a>
+  <a href="/permisos?estado=Rechazado" class="btn btn-sm <%= estado === 'Rechazado' ? 'btn-primary' : 'btn-secondary' %>">Rechazados</a>
+</div>
+
+<div class="panel">
+  <h3>Solicitar Permiso</h3>
+  <form method="POST" action="/permisos" class="form">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Empleado</label>
+        <select name="empleado_id" required class="input">
+          <option value="">-- Seleccionar --</option>
+          <% empleados.forEach(e => { %>
+            <option value="<%= e.id %>"><%= e.apellidos %> <%= e.nombres %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select name="tipo" required class="input">
+          <option value="Vacaciones">Vacaciones</option>
+          <option value="Enfermedad">Enfermedad</option>
+          <option value="Calamidad Doméstica">Calamidad Doméstica</option>
+          <option value="Maternidad">Maternidad</option>
+          <option value="Paternidad">Paternidad</option>
+          <option value="Personal">Personal</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Fecha Inicio</label>
+        <input type="date" name="fecha_inicio" required class="input">
+      </div>
+      <div class="form-group">
+        <label>Fecha Fin</label>
+        <input type="date" name="fecha_fin" required class="input">
+      </div>
+      <div class="form-group">
+        <label>Días</label>
+        <input type="number" name="dias" required step="0.5" min="0.5" class="input">
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" name="justificado" checked> Justificado</label>
+      </div>
+      <div class="form-group" style="grid-column: 1/-1">
+        <label>Observación</label>
+        <input type="text" name="observacion" class="input">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Registrar</button>
+  </form>
+</div>
+
+<h2>Permisos - <%= estado %></h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Empleado</th>
+      <th>Tipo</th>
+      <th>Desde</th>
+      <th>Hasta</th>
+      <th>Días</th>
+      <th>Justificado</th>
+      <th>Observación</th>
+      <% if (estado === 'Pendiente') { %><th>Acciones</th><% } %>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (permisos.length === 0) { %>
+      <tr><td colspan="8" class="text-center">Sin permisos en este estado.</td></tr>
+    <% } %>
+    <% permisos.forEach(p => { %>
+      <tr>
+        <td><%= p.apellidos %> <%= p.nombres %></td>
+        <td><%= p.tipo %></td>
+        <td><%= p.fecha_inicio %></td>
+        <td><%= p.fecha_fin %></td>
+        <td><%= p.dias %></td>
+        <td><%= p.justificado ? 'Sí' : 'No' %></td>
+        <td><%= p.observacion || '' %></td>
+        <% if (estado === 'Pendiente') { %>
+          <td>
+            <form method="POST" action="/permisos/<%= p.id %>/estado" style="display:inline">
+              <input type="hidden" name="estado" value="Aprobado">
+              <button type="submit" class="btn btn-sm btn-success">Aprobar</button>
+            </form>
+            <form method="POST" action="/permisos/<%= p.id %>/estado" style="display:inline">
+              <input type="hidden" name="estado" value="Rechazado">
+              <button type="submit" class="btn btn-sm btn-danger">Rechazar</button>
+            </form>
+          </td>
+        <% } %>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

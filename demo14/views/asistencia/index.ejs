@@ -1,0 +1,68 @@
+<%- include('../partials/header') %>
+
+<h1>Control de Asistencia</h1>
+
+<form class="filter-bar" method="GET" action="/asistencia">
+  <input type="date" name="fecha" value="<%= fecha %>" class="input">
+  <button type="submit" class="btn btn-secondary">Ver Día</button>
+</form>
+
+<div class="panel">
+  <h3>Registrar Marcación</h3>
+  <form method="POST" action="/asistencia/marcar" class="form-inline">
+    <select name="empleado_id" required class="input">
+      <option value="">-- Seleccionar Empleado --</option>
+      <% empleados.forEach(e => { %>
+        <option value="<%= e.id %>"><%= e.cedula %> - <%= e.apellidos %> <%= e.nombres %></option>
+      <% }) %>
+    </select>
+    <input type="hidden" name="fecha" value="<%= fecha %>">
+    <input type="time" name="hora_entrada" class="input" placeholder="Entrada">
+    <input type="time" name="hora_salida" class="input" placeholder="Salida">
+    <input type="text" name="observacion" class="input" placeholder="Observación">
+    <button type="submit" class="btn btn-primary">Registrar</button>
+  </form>
+</div>
+
+<h2>Registros del <%= fecha %></h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Cédula</th>
+      <th>Empleado</th>
+      <th>Entrada</th>
+      <th>Salida</th>
+      <th>H. Normales</th>
+      <th>H. Supl.</th>
+      <th>H. Extr.</th>
+      <th>Atraso (min)</th>
+      <th>Obs.</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (registros.length === 0) { %>
+      <tr><td colspan="10" class="text-center">Sin registros para esta fecha.</td></tr>
+    <% } %>
+    <% registros.forEach(r => { %>
+      <tr>
+        <td><%= r.cedula %></td>
+        <td><%= r.apellidos %> <%= r.nombres %></td>
+        <td><%= r.hora_entrada || '-' %></td>
+        <td><%= r.hora_salida || '-' %></td>
+        <td><%= r.horas_normales %></td>
+        <td><%= r.horas_suplementarias %></td>
+        <td><%= r.horas_extraordinarias %></td>
+        <td><%= r.atraso_minutos > 0 ? r.atraso_minutos : '-' %></td>
+        <td><%= r.observacion || '' %></td>
+        <td>
+          <form method="POST" action="/asistencia/<%= r.id %>/eliminar" style="display:inline">
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Eliminar?')">X</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

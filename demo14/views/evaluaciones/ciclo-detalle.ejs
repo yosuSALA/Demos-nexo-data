@@ -1,0 +1,76 @@
+<%- include('../partials/header') %>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <div>
+    <h1><%= ciclo.nombre %></h1>
+    <p class="subtitle"><%= ciclo.descripcion %> · <%= ciclo.fecha_inicio %> → <%= ciclo.fecha_fin %></p>
+  </div>
+  <a href="/evaluaciones" class="btn btn-secondary">← Volver</a>
+</div>
+
+<h2 style="margin-bottom:16px;">Empleados Evaluados</h2>
+<div style="display:grid; gap:16px;">
+  <% evaluados.forEach(ev => { %>
+    <div class="panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <strong style="font-size:16px;"><%= ev.nombre %></strong>
+          <small class="text-muted" style="display:block;"><%= ev.cargo %> · <%= ev.departamento %></small>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span>
+            <strong><%= ev.completadas %></strong>/<%= ev.total_eval %> completadas
+          </span>
+          <% if (ev.completadas > 0) { %>
+            <a href="/evaluaciones/reporte/<%= ciclo.id %>/<%= ev.evaluado_id %>" class="btn btn-primary">
+              📊 Ver Reporte
+            </a>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Tipo Evaluador</th>
+              <th>Estado</th>
+              <th>Fecha</th>
+              <th>Enlace</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% detalles.filter(d => {
+              const evalRow = evaluados.find(e => e.evaluado_id === ev.evaluado_id);
+              return true;
+            });
+            detalles.forEach(d => { %>
+              <tr>
+                <td><span class="badge <%= d.tipo_evaluador === 'Jefe' ? 'badge-danger' : d.tipo_evaluador === 'Subordinado' ? 'badge-purple' : 'badge-info' %>"><%= d.tipo_evaluador %></span></td>
+                <td>
+                  <% if (d.completada) { %>
+                    <span class="badge badge-success">✓ Completada</span>
+                  <% } else { %>
+                    <span class="badge badge-warning">Pendiente</span>
+                  <% } %>
+                </td>
+                <td><%= d.fecha_completada || '—' %></td>
+                <td>
+                  <% if (!d.completada) { %>
+                    <a href="/evaluaciones/evaluar/<%= d.token %>" target="_blank" class="btn btn-sm btn-secondary">
+                      Abrir formulario
+                    </a>
+                  <% } else { %>
+                    <span class="text-muted">—</span>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

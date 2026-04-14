@@ -1,0 +1,63 @@
+<%- include('partials/header') %>
+
+<h1>Dashboard</h1>
+<p class="subtitle"><%= meses[mes] %> <%= anio %></p>
+
+<div class="cards">
+  <div class="card card-blue">
+    <h3>Empleados Activos</h3>
+    <span class="card-number"><%= totalEmpleados %></span>
+  </div>
+  <div class="card card-green">
+    <h3>Costo Nómina</h3>
+    <span class="card-number"><%= formatMoney(costoNomina.ingresos) %></span>
+    <small>Ingresos brutos del mes</small>
+  </div>
+  <div class="card card-purple">
+    <h3>Neto a Pagar</h3>
+    <span class="card-number"><%= formatMoney(costoNomina.neto) %></span>
+    <small>Líquido a transferir</small>
+  </div>
+  <div class="card card-orange">
+    <h3>Aporte Patronal</h3>
+    <span class="card-number"><%= formatMoney(costoNomina.patronal) %></span>
+    <small>IESS patronal del mes</small>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="panel">
+    <h2>Alertas</h2>
+    <% if (permisosPendientes > 0) { %>
+      <div class="alert alert-warning">
+        <strong><%= permisosPendientes %></strong> permiso(s) pendiente(s) de aprobación.
+        <a href="/permisos">Ver</a>
+      </div>
+    <% } %>
+    <% if (contratosPorVencer.length > 0) { %>
+      <div class="alert alert-danger">
+        <strong><%= contratosPorVencer.length %></strong> contrato(s) a plazo fijo que requieren atención.
+      </div>
+      <ul>
+        <% contratosPorVencer.forEach(e => { %>
+          <li><a href="/empleados/<%= e.id %>"><%= e.apellidos %> <%= e.nombres %></a> - <%= e.cargo %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+    <% if (permisosPendientes === 0 && contratosPorVencer.length === 0) { %>
+      <p class="text-muted">Sin alertas pendientes.</p>
+    <% } %>
+  </div>
+
+  <div class="panel">
+    <h2>Acciones Rápidas</h2>
+    <div class="quick-actions">
+      <a href="/empleados/nuevo" class="btn btn-primary">Nuevo Empleado</a>
+      <a href="/nomina?mes=<%= mes %>&anio=<%= anio %>" class="btn btn-success">Ver Nómina</a>
+      <a href="/asistencia" class="btn btn-info">Registrar Asistencia</a>
+      <a href="/configuracion" class="btn btn-secondary">Configuración</a>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -125,8 +125,18 @@ Thumbs.db
 desktop.ini
 
 # Project specific
+*.db
 test.db
 *.xlsx
 *.csv
-demo7/envios.log
-demo7/reportes_mensuales/
+
+# Demo 7 — Nexo RRHH
+demo7/backend/uploads/
+demo7/backend/__pycache__/
+demo7/backend/app/**/__pycache__/
+demo7/frontend/node_modules/
+demo7/frontend/dist/
+*.log
+
+# Node
+node_modules/

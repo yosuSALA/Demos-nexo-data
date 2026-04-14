@@ -1,0 +1,182 @@
+<%- include('../partials/header') %>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <div>
+    <h1>Reporte 360° – <%= empleado.apellidos %> <%= empleado.nombres %></h1>
+    <p class="subtitle"><%= ciclo.nombre %> · <%= totalCompletadas %> evaluaciones completadas</p>
+  </div>
+  <a href="/evaluaciones/ciclo/<%= ciclo.id %>" class="btn btn-secondary">← Volver</a>
+</div>
+
+<div class="grid-2">
+  <!-- RADAR CHART -->
+  <div class="panel">
+    <h2>Radar de Competencias</h2>
+    <div style="position:relative; height:340px; display:flex; align-items:center; justify-content:center;">
+      <canvas id="radarChart"></canvas>
+    </div>
+  </div>
+
+  <!-- TABLA DE PUNTAJES -->
+  <div class="panel">
+    <h2>Puntajes por Criterio</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Criterio</th>
+          <th>Promedio</th>
+          <th>Vs. Ciclo</th>
+          <th>Nivel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% promedioGlobal.forEach((pg, i) => {
+          const general = promedioGeneral.find(g => g.criterio === pg.criterio);
+          const diff = general ? (pg.promedio - general.promedio).toFixed(2) : 0;
+          const diffN = parseFloat(diff);
+        %>
+          <tr>
+            <td><strong><%= pg.criterio %></strong></td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div style="background:var(--gray-200); border-radius:4px; width:80px; height:8px; overflow:hidden;">
+                  <div style="background:var(--primary); width:<%= (pg.promedio/5)*100 %>%; height:100%;"></div>
+                </div>
+                <strong><%= pg.promedio %></strong>
+              </div>
+            </td>
+            <td>
+              <span style="color:<%= diffN >= 0 ? 'var(--success)' : 'var(--danger)' %>; font-weight:600;">
+                <%= diffN >= 0 ? '+' : '' %><%= diff %>
+              </span>
+            </td>
+            <td>
+              <span class="badge <%=
+                pg.promedio >= 4.5 ? 'badge-success' :
+                pg.promedio >= 3.5 ? 'badge-info' :
+                pg.promedio >= 2.5 ? 'badge-warning' : 'badge-danger'
+              %>">
+                <%=
+                  pg.promedio >= 4.5 ? 'Excelente' :
+                  pg.promedio >= 3.5 ? 'Bueno' :
+                  pg.promedio >= 2.5 ? 'Regular' : 'Por mejorar'
+                %>
+              </span>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DESGLOSE POR TIPO DE EVALUADOR -->
+<div class="panel" style="margin-top:20px;">
+  <h2>Desglose por Tipo de Evaluador</h2>
+  <div style="overflow-x:auto;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Criterio</th>
+          <th>Jefe</th>
+          <th>Pares</th>
+          <th>Subordinados</th>
+          <th>Promedio General</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% criterios.forEach(c => {
+          const jefe = promedios.find(p => p.criterio === c.nombre && p.tipo_evaluador === 'Jefe');
+          const par = promedios.find(p => p.criterio === c.nombre && p.tipo_evaluador === 'Par');
+          const sub = promedios.find(p => p.criterio === c.nombre && p.tipo_evaluador === 'Subordinado');
+          const global = promedioGlobal.find(p => p.criterio === c.nombre);
+        %>
+          <tr>
+            <td><strong><%= c.nombre %></strong></td>
+            <td><%= jefe ? jefe.promedio : '—' %></td>
+            <td><%= par ? par.promedio : '—' %></td>
+            <td><%= sub ? sub.promedio : '—' %></td>
+            <td><strong><%= global ? global.promedio : '—' %></strong></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- RECOMENDACIONES AUTOMÁTICAS -->
+<div class="panel" style="margin-top:20px;">
+  <h2>💡 Recomendaciones</h2>
+  <% const fortalezas = promedioGlobal.filter(p => p.promedio >= 4.0);
+     const mejoras = promedioGlobal.filter(p => p.promedio < 3.5); %>
+
+  <% if (fortalezas.length > 0) { %>
+    <div class="alert alert-success" style="margin-bottom:12px;">
+      <strong>Fortalezas:</strong>
+      <%= fortalezas.map(f => f.criterio).join(', ') %>
+      — Mantener y potenciar estas competencias.
+    </div>
+  <% } %>
+
+  <% if (mejoras.length > 0) { %>
+    <div class="alert alert-warning">
+      <strong>Áreas de mejora:</strong>
+      <%= mejoras.map(m => m.criterio).join(', ') %>
+      — Se recomienda incluir en el plan de desarrollo individual.
+    </div>
+  <% } %>
+
+  <% if (fortalezas.length === 0 && mejoras.length === 0) { %>
+    <p class="text-muted">Desempeño dentro del rango esperado en todas las competencias.</p>
+  <% } %>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+const labels = [<% promedioGlobal.forEach((p, i) => { %>'<%= p.criterio %>'<%= i < promedioGlobal.length-1 ? ',' : '' %><% }) %>];
+const dataEmpleado = [<% promedioGlobal.forEach((p, i) => { %><%= p.promedio || 0 %><%= i < promedioGlobal.length-1 ? ',' : '' %><% }) %>];
+const dataGeneral = [<% promedioGeneral.forEach((p, i) => { %><%= p.promedio || 0 %><%= i < promedioGeneral.length-1 ? ',' : '' %><% }) %>];
+
+new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: '<%= empleado.nombres %> <%= empleado.apellidos %>',
+        data: dataEmpleado,
+        borderColor: 'rgba(37,99,235,1)',
+        backgroundColor: 'rgba(37,99,235,0.15)',
+        borderWidth: 2,
+        pointBackgroundColor: 'rgba(37,99,235,1)',
+      },
+      {
+        label: 'Promedio del ciclo',
+        data: dataGeneral,
+        borderColor: 'rgba(156,163,175,1)',
+        backgroundColor: 'rgba(156,163,175,0.1)',
+        borderWidth: 1.5,
+        borderDash: [5, 5],
+        pointBackgroundColor: 'rgba(156,163,175,1)',
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      r: {
+        min: 0,
+        max: 5,
+        ticks: { stepSize: 1 },
+        grid: { color: 'rgba(0,0,0,0.08)' },
+      }
+    },
+    plugins: {
+      legend: { position: 'bottom' }
+    }
+  }
+});
+</script>
+
+<%- include('../partials/footer') %>

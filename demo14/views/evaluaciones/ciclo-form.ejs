@@ -1,0 +1,102 @@
+<%- include('../partials/header') %>
+
+<h1>Nuevo Ciclo de Evaluación</h1>
+<p class="subtitle">Configura los parámetros del ciclo 360°</p>
+
+<% if (error) { %>
+  <div class="alert alert-danger"><%= error %></div>
+<% } %>
+
+<form action="/evaluaciones/ciclo" method="POST">
+  <div class="grid-2">
+    <div class="panel">
+      <h2>Información del Ciclo</h2>
+
+      <div class="form-group">
+        <label>Nombre del ciclo *</label>
+        <input type="text" name="nombre" required placeholder="ej. Evaluación Semestral Q2 2026"
+          value="Evaluación Semestral Q2 2026" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Descripción</label>
+        <input type="text" name="descripcion" placeholder="Descripción opcional" class="form-control"
+          value="Evaluación de desempeño 360° segundo semestre 2026">
+      </div>
+
+      <div class="form-group">
+        <label>Fecha inicio *</label>
+        <input type="date" name="fecha_inicio" required class="form-control" value="2026-05-01">
+      </div>
+
+      <div class="form-group">
+        <label>Fecha fin *</label>
+        <input type="date" name="fecha_fin" required class="form-control" value="2026-06-30">
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Criterios de Evaluación</h2>
+      <p class="text-muted" style="margin-bottom:12px;">Competencias que se evaluarán (puntaje 1-5)</p>
+
+      <div id="criterios-list">
+        <div class="form-group">
+          <input type="text" name="criterios_nombre" value="Liderazgo" class="form-control" placeholder="Criterio">
+        </div>
+        <div class="form-group">
+          <input type="text" name="criterios_nombre" value="Trabajo en Equipo" class="form-control" placeholder="Criterio">
+        </div>
+        <div class="form-group">
+          <input type="text" name="criterios_nombre" value="Orientación al Resultado" class="form-control" placeholder="Criterio">
+        </div>
+        <div class="form-group">
+          <input type="text" name="criterios_nombre" value="Comunicación" class="form-control" placeholder="Criterio">
+        </div>
+        <div class="form-group">
+          <input type="text" name="criterios_nombre" value="Innovación" class="form-control" placeholder="Criterio">
+        </div>
+        <div class="form-group">
+          <input type="text" name="criterios_nombre" value="Puntualidad y Compromiso" class="form-control" placeholder="Criterio">
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-secondary" onclick="agregarCriterio()">+ Agregar criterio</button>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:20px;">
+    <h2>Empleados a Evaluar</h2>
+    <p class="text-muted" style="margin-bottom:12px;">
+      Por cada empleado se crearán evaluadores: 1 Jefe + 2 Pares + 1 Subordinado (anónimos)
+    </p>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:8px;">
+      <% empleados.forEach(emp => { %>
+        <label style="display:flex; align-items:center; gap:8px; padding:10px; border:1px solid var(--gray-200); border-radius:6px; cursor:pointer;">
+          <input type="checkbox" name="evaluados" value="<%= emp.id %>" checked>
+          <div>
+            <strong><%= emp.apellidos %> <%= emp.nombres %></strong>
+            <small class="text-muted" style="display:block;"><%= emp.cargo %> · <%= emp.departamento %></small>
+          </div>
+        </label>
+      <% }) %>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:12px; margin-top:20px;">
+    <button type="submit" class="btn btn-primary">Crear Ciclo y Generar Evaluadores</button>
+    <a href="/evaluaciones" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+
+<script>
+function agregarCriterio() {
+  const div = document.createElement('div');
+  div.className = 'form-group';
+  div.innerHTML = '<input type="text" name="criterios_nombre" class="form-control" placeholder="Nuevo criterio" required>';
+  document.getElementById('criterios-list').appendChild(div);
+  div.querySelector('input').focus();
+}
+</script>
+
+<%- include('../partials/footer') %>

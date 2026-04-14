@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluación 360° – Anónima</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    body { background: var(--gray-100); }
+    .eval-wrap { max-width: 700px; margin: 40px auto; padding: 0 20px; }
+    .eval-header { background: var(--primary); color: white; padding: 24px; border-radius: 10px 10px 0 0; }
+    .eval-body { background: white; padding: 24px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .criterio-card { border: 1px solid var(--gray-200); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+    .stars { display: flex; gap: 8px; margin: 12px 0; }
+    .star-btn { width: 44px; height: 44px; border: 2px solid var(--gray-300); border-radius: 8px; background: white;
+      cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; }
+    .star-btn:hover, .star-btn.selected { background: var(--primary); border-color: var(--primary); color: white; }
+    .score-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray-500); margin-bottom: 8px; }
+    .anon-note { background: var(--gray-50); border-left: 3px solid var(--info); padding: 12px; border-radius: 4px; margin-bottom: 20px; font-size: 13px; }
+  </style>
+</head>
+<body>
+<div class="eval-wrap">
+  <div class="eval-header">
+    <h2 style="margin-bottom:4px;">Evaluación de Desempeño 360°</h2>
+    <p style="opacity:0.85;"><%= ciclo_nombre %> · Rol: <%= evaluacion.tipo_evaluador %></p>
+  </div>
+  <div class="eval-body">
+    <div class="anon-note">
+      🔒 <strong>Esta evaluación es completamente anónima.</strong>
+      Tu identidad no será revelada al evaluado ni a RRHH.
+    </div>
+
+    <h3 style="margin-bottom:4px;">Evaluado: <%= evaluacion.evaluado_nombre %></h3>
+    <p class="text-muted" style="margin-bottom:24px;"><%= evaluacion.evaluado_cargo %></p>
+
+    <% if (error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+
+    <form action="/evaluaciones/evaluar/<%= evaluacion.token %>" method="POST">
+      <% criterios.forEach(c => { %>
+        <div class="criterio-card">
+          <strong style="font-size:15px;"><%= c.nombre %></strong>
+          <% if (c.descripcion) { %><p class="text-muted" style="margin-top:4px; font-size:13px;"><%= c.descripcion %></p><% } %>
+
+          <input type="hidden" name="puntaje_<%= c.id %>" id="puntaje_<%= c.id %>" required>
+
+          <div class="score-labels">
+            <span>1 – Muy bajo</span>
+            <span>2 – Bajo</span>
+            <span>3 – Regular</span>
+            <span>4 – Bueno</span>
+            <span>5 – Excelente</span>
+          </div>
+          <div class="stars">
+            <% for (let i = 1; i <= 5; i++) { %>
+              <button type="button" class="star-btn" data-crit="<%= c.id %>" data-val="<%= i %>"
+                onclick="seleccionar(<%= c.id %>, <%= i %>)"><%= i %></button>
+            <% } %>
+          </div>
+
+          <div class="form-group" style="margin-top:8px;">
+            <input type="text" name="comentario_<%= c.id %>" class="form-control"
+              placeholder="Comentario opcional (anónimo)" style="font-size:13px;">
+          </div>
+        </div>
+      <% }) %>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px; padding:14px; font-size:16px;">
+        Enviar Evaluación
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+function seleccionar(critId, val) {
+  document.getElementById('puntaje_' + critId).value = val;
+  document.querySelectorAll('[data-crit="' + critId + '"]').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.val) <= val);
+  });
+}
+</script>
+</body>
+</html>

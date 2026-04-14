@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <div>
+    <h1>Evaluación de Desempeño 360°</h1>
+    <p class="subtitle">Gestión de ciclos de evaluación</p>
+  </div>
+  <a href="/evaluaciones/nuevo-ciclo" class="btn btn-primary">+ Nuevo Ciclo</a>
+</div>
+
+<% if (ciclos.length === 0) { %>
+  <div class="panel" style="text-align:center; padding:60px;">
+    <p style="font-size:48px; margin-bottom:16px;">📊</p>
+    <h2>Sin ciclos de evaluación</h2>
+    <p class="text-muted" style="margin:10px 0 20px;">Crea tu primer ciclo para comenzar las evaluaciones 360°</p>
+    <a href="/evaluaciones/nuevo-ciclo" class="btn btn-primary">Crear primer ciclo</a>
+  </div>
+<% } else { %>
+  <div style="display:grid; gap:16px;">
+    <% ciclos.forEach(c => { %>
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <h3 style="margin-bottom:4px;"><%= c.nombre %></h3>
+            <p class="text-muted" style="margin-bottom:8px;"><%= c.descripcion %></p>
+            <small class="text-muted">
+              📅 <%= c.fecha_inicio %> → <%= c.fecha_fin %>
+            </small>
+          </div>
+          <div style="text-align:right;">
+            <span class="badge <%= c.estado === 'Activo' ? 'badge-success' : 'badge-secondary' %>">
+              <%= c.estado %>
+            </span>
+          </div>
+        </div>
+
+        <div class="cards" style="margin-top:16px; grid-template-columns: repeat(3, 1fr);">
+          <div class="card card-blue" style="padding:12px;">
+            <small>Evaluados</small>
+            <strong style="font-size:24px; display:block;"><%= c.total_evaluados %></strong>
+          </div>
+          <div class="card card-green" style="padding:12px;">
+            <small>Evaluaciones</small>
+            <strong style="font-size:24px; display:block;"><%= c.completadas %> / <%= c.total_eval %></strong>
+          </div>
+          <div class="card card-purple" style="padding:12px;">
+            <small>Progreso</small>
+            <strong style="font-size:24px; display:block;">
+              <%= c.total_eval > 0 ? Math.round((c.completadas / c.total_eval) * 100) : 0 %>%
+            </strong>
+          </div>
+        </div>
+
+        <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap;">
+          <a href="/evaluaciones/ciclo/<%= c.id %>" class="btn btn-secondary">Ver detalle</a>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>

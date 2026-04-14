@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Nómina Ecuador</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">Nómina EC</a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Dashboard</a></li>
+      <li><a href="/empleados" class="<%= currentPath.startsWith('/empleados') ? 'active' : '' %>">Empleados</a></li>
+      <li><a href="/asistencia" class="<%= currentPath.startsWith('/asistencia') ? 'active' : '' %>">Asistencia</a></li>
+      <li><a href="/permisos" class="<%= currentPath.startsWith('/permisos') ? 'active' : '' %>">Permisos</a></li>
+      <li class="dropdown">
+        <a href="/nomina" class="<%= currentPath.startsWith('/nomina') ? 'active' : '' %>">Nómina</a>
+        <ul class="dropdown-menu">
+          <li><a href="/nomina">Roles de Pago</a></li>
+          <li><a href="/nomina/decimo-tercero">Décimo Tercero</a></li>
+          <li><a href="/nomina/decimo-cuarto">Décimo Cuarto</a></li>
+          <li><a href="/nomina/vacaciones">Vacaciones</a></li>
+          <li><a href="/nomina/utilidades">Utilidades</a></li>
+        </ul>
+      </li>
+      <li><a href="/evaluaciones" class="<%= currentPath.startsWith('/evaluaciones') ? 'active' : '' %>">Evaluación 360°</a></li>
+      <li><a href="/reportes" class="<%= currentPath.startsWith('/reportes') ? 'active' : '' %>">Reportes</a></li>
+      <li><a href="/configuracion" class="<%= currentPath.startsWith('/configuracion') ? 'active' : '' %>">Config</a></li>
+    </ul>
+  </nav>
+  <main class="container">
