@@ -84,7 +84,7 @@ Este listado detalla las responsabilidades inmediatas. **Meta Semana 3:** Elimin
 
 ### 🐳 Nexo Team (Infraestructura)
 - **Dockerización:** Cada miembro debe crear su `Dockerfile` siguiendo el estándar del equipo.
-- **Tailscale:** Asegurar la disponibilidad 24/7 del servidor `100.101.185.36`.
+- **Tailscale:** Asegurar la disponibilidad 24/7 del servidor `100.108.226.8`.
 
 ---
 **Nexo Data Consulting**
